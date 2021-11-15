@@ -16,15 +16,15 @@ public class Monitor {
 
 
     public Monitor() {
-        this.OpenStatus = new ArrayList<String>();
+        this.OpenStatus = new ArrayList<>();
         this.OpenStatusDescription = "Default Status Description";
         this.Level = 0;
         this.LevelDescription = "Default Level Description";
-        this.Metric = new ArrayList<String>();
+        this.Metric = new ArrayList<>();
         this.LastCoffee = LocalDateTime.MIN;
         this.NumberCoffee = 0;
         this.TempCoffee = 0f;
-        this.Errors = new ArrayList<String>();
+        this.Errors = new ArrayList<>();
     }
 
 
@@ -119,4 +119,67 @@ public class Monitor {
         this.Metric.add(new_metric);
         return true;
     }
+
+    // LastCoffee
+    public LocalDateTime getLastCoffee() {
+        return this.LastCoffee;
+    }
+
+    public void renewLastCoffee() {
+        this.LastCoffee = LocalDateTime.now();
+    }
+
+    // Coffee Number
+    public int getNumberCoffee() {
+        return this.NumberCoffee;
+    }
+
+    public void addNumberCoffee() {
+        this.NumberCoffee += 1;
+    }
+
+    // TempCoffee
+    public float getTempCoffee() {
+        return this.TempCoffee;
+    }
+
+    public boolean setTempCoffee(float temp) {
+        if (temp < 0f)
+            return false;
+        this.TempCoffee = temp;
+        return true;
+    }
+
+    // Errors
+    public List<String> get_list_errors() {
+        return this.Errors;
+    }
+
+    public String get_int_errors(int i) {
+        if (i < 0 || i > this.Errors.size() - 1)
+            return null;
+        return this.Errors.get(i);
+    }
+
+    public boolean setError(int i, String new_error) {
+        if (i < 0 || i > this.Errors.size() - 1 || new_error == null)
+            return false;
+        this.Errors.set(i, new_error);
+        return true;
+    }
+
+    public boolean addError(String new_error) {
+        if (new_error == null)
+            return false;
+        this.Errors.add(new_error);
+        return true;
+    }
+
+    public boolean delError(int i) {
+        if (i < 0 || i > this.Errors.size() - 1)
+            return false;
+        this.Errors.remove(i);
+        return true;
+    }
 }
+
