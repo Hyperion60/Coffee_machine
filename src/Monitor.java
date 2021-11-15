@@ -16,15 +16,15 @@ public class Monitor {
 
 
     public Monitor() {
-        this.OpenStatus = new ArrayList<String>();
+        this.OpenStatus = new ArrayList<>();
         this.OpenStatusDescription = "Default Status Description";
         this.Level = 0;
         this.LevelDescription = "Default Level Description";
-        this.Metric = new ArrayList<String>();
+        this.Metric = new ArrayList<>();
         this.LastCoffee = LocalDateTime.MIN;
         this.NumberCoffee = 0;
         this.TempCoffee = 0f;
-        this.Errors = new ArrayList<String>();
+        this.Errors = new ArrayList<>();
     }
 
 
