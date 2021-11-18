@@ -13,4 +13,27 @@ public class User {
     public String getName() {
         return this.Name;
     }
+
+    public void setName(String name) {
+        this.Name = name;
+    }
+
+    public boolean paiement(int sum) {
+        if (sum > this.bank)
+            return false;
+        this.bank -= sum;
+        return true;
+    }
+
+    public void recharge(int value) {
+        this.bank += value;
+    }
+
+    public Privileges getPrivileges() {
+        return this.privileges;
+    }
+
+    public void setPrivileges(Privileges privileges) {
+        this.privileges = privileges;
+    }
 }
