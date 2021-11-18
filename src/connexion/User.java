@@ -8,9 +8,10 @@ public class User {
     private Privileges privileges;
     private float bank;
 
-    public User(String name, Privileges privileges) {
+    public User(String name, String password, Privileges privileges) {
         this.Name = name;
         this.privileges = privileges;
+        this.Password = password;
         this.bank = 0;
     }
 
