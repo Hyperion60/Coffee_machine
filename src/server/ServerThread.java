@@ -1,11 +1,14 @@
 package server;
 
+import connexion.User;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
 public class ServerThread implements Runnable {
     private Socket client;
+    private User user;
     private Thread thread;
     private IOCommandes file;
 
@@ -24,6 +27,7 @@ public class ServerThread implements Runnable {
         IOCommandes my_stream = new IOCommandes(this.client);
         while (true) {
             line = my_stream.lireReseau();
+
             System.out.println("client>" + line);
             if (line != null) {
                 my_stream.ecrireEcran("echo>" + line);
