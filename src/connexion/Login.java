@@ -27,14 +27,13 @@ public class Login {
     }
 
     //Parser
-        public String parser(String name_password )
+        public void parser(String name_password)
     {
-        this.Name = null;
-        this.Password = null;
-        String[] tab = name_password.split(":");
-        String[] tab2 = tab[1].split(",");
-        Name=tab2[0];
-        Password=tab2[1];
-        return "test";
+        //this.Name = null;
+        //this.Password = null;
+        String[] separation1 = name_password.split(":");
+        String[] separation2 = separation1[1].split(",");
+        this.Name=separation2[0];
+        this.Password=separation2[1];
     }
 }
