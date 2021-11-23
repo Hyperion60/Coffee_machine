@@ -13,7 +13,7 @@ public class main_parser {
         }
         switch (type) {
             case "Login":
-                Login.Parser(user, input);
+                Login.parser(user, input);
                 break;
             case "Signup":
                 lists.signup.Parser_signup(lists, input);
