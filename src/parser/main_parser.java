@@ -1,11 +1,17 @@
-package Parser;
+package parser;
 
-import Structures.Global_lists;
+import Structures.Globals;
 import connexion.Login;
 import connexion.User;
 
 public class main_parser {
-    public int main_parser_line(Global_lists lists, String input, User user) {
+    private Login login;
+
+    public main_parser() {
+        this.login = new Login();
+    }
+
+    public int main_parser_line(Globals lists, String input, ServerThread thread) {
         String type = input.split(":")[0];
         int return_code = 0;
         if (type.length() == 0) {
@@ -26,8 +32,6 @@ public class main_parser {
                 return_code = 3;
             default:
                 return_code = 0;
-
-
         }
         return return_code;
     }

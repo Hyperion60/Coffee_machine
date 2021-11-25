@@ -1,6 +1,5 @@
 package connexion;
-
-import Structures.Global_lists;
+import Structures.Globals;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class Login {
 
     public Login() {}
 
-    public User log_in(Global_lists lists, String name, String password) throws Exception {
+    public User log_in(Globals lists, String name, String password) throws Exception {
         this.user = null;
         for (User user: lists.list_user) {
             if (user.getName().equals(name))

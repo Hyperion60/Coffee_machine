@@ -9,7 +9,7 @@ import server.ServerThread;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Global_lists {
+public class Globals {
     public List<User> list_user;
     public List<ServerThread> list_client;
     public Machine coffee;
@@ -17,7 +17,7 @@ public class Global_lists {
     public Login login;
     public int server_port;
 
-    public Global_lists() {
+    public Globals() {
         this.list_user = new ArrayList<>();
         this.list_client = new ArrayList<>();
         this.coffee = new Machine();
@@ -25,5 +25,6 @@ public class Global_lists {
         this.login = new Login();
         this.server_port = 867;
     }
+
 
 }

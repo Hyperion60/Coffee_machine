@@ -1,13 +1,13 @@
 package connexion;
 
-import Structures.Global_lists;
+import Structures.Globals;
 
 public class Signup {
     public void new_account(String name, String password) {
 
     }
 
-    public void Parser_signup(Global_lists lists, String input) {
+    public void Parser_signup(Globals lists, String input) {
     }
 
 }

@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 
 public class ServerThread implements Runnable {
     private Socket client;
-    private User user;
+    private Structures.Globals Globals;
+    public User user;
+    private main_parser Parser;
     private Thread thread;
     private IOCommandes file;
 

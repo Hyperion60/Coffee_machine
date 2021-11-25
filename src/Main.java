@@ -1,4 +1,4 @@
-import Structures.Global_lists;
+import Structures.Globals;
 import Structures.Privileges;
 import connexion.User;
 import server.ServerThread;
@@ -6,12 +6,11 @@ import server.ServerThread;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         // Initialisation Global variables
-        Global_lists lists = new Global_lists();
+        Globals lists = new Globals();
 
         // Create Admin user
         lists.list_user.add(new User("admin", "secret", Privileges.MAINTAINER));
