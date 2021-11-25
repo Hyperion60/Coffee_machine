@@ -3,6 +3,7 @@ package parser;
 import Structures.Globals;
 import connexion.Login;
 import connexion.User;
+import server.ServerThread;
 
 public class main_parser {
     private Login login;
@@ -19,17 +20,24 @@ public class main_parser {
         }
         switch (type) {
             case "Login":
-                Login.parser(user, input);
+                thread.user = new User(login.login_parser(lists.list_user, input));
                 break;
             case "Signup":
                 lists.signup.Parser_signup(lists, input);
                 break;
             case "Logout":
-                return_code = 2;
-                user = null;
+                if (thread.user == null){
+                    return_code = 2;
+                    thread.user = null;
+                } else {
+                    return_code = -2;
+                }
                 break;
             case "bank":
-                return_code = 3;
+                if (thread.user == null)
+                    return_code = -3;
+                else
+                    return_code = 3;
             default:
                 return_code = 0;
         }

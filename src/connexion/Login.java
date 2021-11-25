@@ -27,12 +27,17 @@ public class Login {
     }
 
     //Parser
-    public static String parser(User user, String name_password)
+    public User login_parser(List<User> list_user, String input_line)
     {
-        String[] separation1 = name_password.split(":");
-        String[] separation2 = separation1[1].split(",");
-        Name=separation2[0];
-        Password=separation2[1];
+        String[] separation = input_line.split(":")[1].split(",");
+        return get_user(list_user, separation[0], separation[1]);
+    }
+
+    public User get_user(List<User> list_user, String name, String password) {
+        for (User user: list_user) {
+            if (user.getName().equals(name) && user.checkPassword(password))
+                return user;
+        }
         return null;
     }
 /*

@@ -33,7 +33,7 @@ public class Main {
             }
             System.out.println("Socket accepted");
             if (new_client != null) {
-                ServerThread client = new ServerThread(new_client, "log.txt");
+                ServerThread client = new ServerThread(new_client, "log.txt", lists);
                 lists.list_client.add(client);
                 Thread t = new Thread(client);
                 t.start();
