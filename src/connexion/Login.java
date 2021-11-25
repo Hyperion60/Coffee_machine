@@ -28,9 +28,9 @@ public class Login {
     }
 
     //Parser
-    public String parser(User user, String name_password)
+    public String parser(User user, String Name_password)
     {
-        String[] separation1 = name_password.split(":");
+        String[] separation1 = Name_password.split(":");
         String[] separation2 = separation1[1].split(",");
         Name=separation2[0];
         Password=separation2[1];
