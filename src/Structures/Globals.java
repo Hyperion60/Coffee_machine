@@ -35,10 +35,10 @@ public class Globals {
         this.list_taille.add(new Taille("Quart-Tasse", 0.7f, 0.35f, 0.2f));
 
         this.list_product = new ArrayList<>();
-        this.list_product.add(new Product("Café", "Café Long", 10, 90f, 1f, 0f, 0f));
-        this.list_product.add(new Product("Café", "Café au Lait", 15, 90f, 0.7f, 0.3f, 0f));
-        this.list_product.add(new Product("Thé", "Vert", 15, 100f, 0f, 1f, 0f));
-        this.list_product.add(new Product("Chocolat", "Normal", 20, 80f, 0f, 0f, 1f));
+        this.list_product.add(new Product("Café", "Café Long", 10, 90f, 0.8f, 1f, 0f, 0f));
+        this.list_product.add(new Product("Café", "Café au Lait", 15, 90f, 1f, 0.7f, 0.3f, 0f));
+        this.list_product.add(new Product("Thé", "Vert", 15, 100f, 1.15f, 0f, 1f, 0f));
+        this.list_product.add(new Product("Chocolat", "Normal", 20, 80f, 1.05f, 0f, 0f, 1f));
     }
 
 

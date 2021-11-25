@@ -42,26 +42,17 @@ public class ServerThread implements Runnable {
                 System.out.println("User : " + user.getName());
                 System.out.println("Bank : " + user.getBank());
             }
-            if (line != null) {
-                stream.ecrireEcran("echo>" + line);
-                try {
-                    this.file.lireFichier();
-                } catch (IOException exception) {
-                    continue;
-                }
-                this.file.ecrireFichier("IP:" + this.client.getInetAddress().toString() + " - " + LocalDateTime.now());
-                this.file.ecrireFichier(line);
-                stream.ecrireReseau("echo>" + line);
-                if (line.equals("quit")) {
-                    break;
-                }
-            } else {
-                try {
-                    this.client.close();
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-                return;
+
+            stream.ecrireEcran("echo>" + line);
+            try {
+                this.file.lireFichier();
+            } catch (IOException exception) {
+                continue;
+            }
+            this.file.ecrireFichier("IP:" + this.client.getInetAddress().toString() + " - " + LocalDateTime.now());
+            this.file.ecrireFichier(line);
+            if (line.equals("quit")) {
+                break;
             }
         }
     }

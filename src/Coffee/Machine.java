@@ -1,5 +1,9 @@
 package Coffee;
 
+import Structures.CommandState;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +14,7 @@ public class Machine {
     private List<String> Type;
     private String Location;
     private Monitor Monitor;
+    private List<Command> list_command;
 
 
     //2.initialisation
@@ -20,7 +25,35 @@ public class Machine {
         this.Type = new ArrayList<>();
         this.Location = "Emplacement machine";
         this.Monitor = new Monitor();
+        this.list_command = new ArrayList<>();
     }
+
+    // Command
+    public void AddCommand(Command command) {
+        this.list_command.add(command);
+    }
+
+    public String ProgressCommand(Command command) {
+        if (this.list_command.size() == 0)
+        {
+            return "Commande terminée ou non traitée";
+        }
+        if (this.list_command.get(0).equals(command) && this.list_command.get(0).state.equals(CommandState.PROGRESS)) {
+            int second_remain = Math.toIntExact(command.begin_date.atZone(ZoneId.systemDefault()).toEpochSecond());
+            second_remain += command.product.getDuree();
+            second_remain -= Math.toIntExact(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond());
+            return "En cours de préparation, temps restant : " + second_remain;
+        }
+        int i = 0;
+        for (Command cmd: this.list_command) {
+            if (cmd.equals(command)) {
+                return "Commande en attente, place dans la file d'attente : " + i;
+            }
+            i += 1;
+        }
+        return "Commande terminée";
+    }
+
 
     //Norme
     public String get_string_norme() {
