@@ -20,10 +20,14 @@ public class main_parser {
         }
         switch (type) {
             case "Login":
-                thread.user = new User(login.login_parser(lists.list_user, input));
+                thread.user = login.login_parser(lists.list_user, input);
                 break;
             case "Signup":
-                lists.signup.Parser_signup(lists, input);
+                if (lists.signup.user_exists(lists, input)) {
+                    thread.stream.ecrireReseau("Erreur : L'utilisateur existe déjà !");
+                } else {
+                    thread.user = lists.signup.Parser_signup(lists, input);
+                }
                 break;
             case "Logout":
                 if (thread.user != null){

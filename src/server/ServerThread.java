@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ServerThread implements Runnable {
     private Socket client;
     private Structures.Globals Globals;
+    public IOCommandes stream;
     public User user;
     private main_parser Parser;
     private Thread thread;
@@ -29,20 +30,19 @@ public class ServerThread implements Runnable {
     @Override
     public void run() {
         String line;
-        IOCommandes my_stream = new IOCommandes(this.client);
+        stream = new IOCommandes(this.client);
         while (true) {
-            line = my_stream.lireReseau();
+            line = stream.lireReseau();
             System.out.println("client>" + line);
             // Parser
             // Return string
             this.Parser = new main_parser();
             this.Parser.main_parser_line(this.Globals, line, this);
-            if (this.user == null)
-                System.out.println("User : null");
-            else
-                System.out.println("User : " + this.user.getName());
+            for (User user: this.Globals.list_user) {
+                System.out.println("User : " + user.getName());
+            }
             if (line != null) {
-                my_stream.ecrireEcran("echo>" + line);
+                stream.ecrireEcran("echo>" + line);
                 try {
                     this.file.lireFichier();
                 } catch (IOException exception) {
@@ -50,7 +50,7 @@ public class ServerThread implements Runnable {
                 }
                 this.file.ecrireFichier("IP:" + this.client.getInetAddress().toString() + " - " + LocalDateTime.now());
                 this.file.ecrireFichier(line);
-                my_stream.ecrireReseau("echo>" + line);
+                stream.ecrireReseau("echo>" + line);
                 if (line.equals("quit")) {
                     break;
                 }
