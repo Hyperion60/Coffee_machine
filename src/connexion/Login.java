@@ -36,11 +36,11 @@ public class Login {
         Password=separation2[1];
         return null;
     }
-/*
+
     //Logout
 
-    public String logout()
+    public static void logout()
     {
-        return Name;
-    }*/
+        System.out.println("logout");
+    }
 }
