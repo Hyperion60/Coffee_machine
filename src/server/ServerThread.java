@@ -37,7 +37,10 @@ public class ServerThread implements Runnable {
             // Return string
             this.Parser = new main_parser();
             this.Parser.main_parser_line(this.Globals, line, this);
-            System.out.println("User" + this.user.getName());
+            if (this.user == null)
+                System.out.println("User : null");
+            else
+                System.out.println("User : " + this.user.getName());
             if (line != null) {
                 my_stream.ecrireEcran("echo>" + line);
                 try {

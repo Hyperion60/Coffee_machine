@@ -26,7 +26,7 @@ public class main_parser {
                 lists.signup.Parser_signup(lists, input);
                 break;
             case "Logout":
-                if (thread.user == null){
+                if (thread.user != null){
                     return_code = 2;
                     thread.user = null;
                 } else {
