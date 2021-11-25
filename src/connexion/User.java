@@ -39,7 +39,7 @@ public class User {
         return true;
     }
 
-    public void recharge(int value) {
+    public void recharge(float value) {
         this.bank += value;
     }
 

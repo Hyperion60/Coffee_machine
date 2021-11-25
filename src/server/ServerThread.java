@@ -40,6 +40,7 @@ public class ServerThread implements Runnable {
             this.Parser.main_parser_line(this.Globals, line, this);
             for (User user: this.Globals.list_user) {
                 System.out.println("User : " + user.getName());
+                System.out.println("Bank : " + user.getBank());
             }
             if (line != null) {
                 stream.ecrireEcran("echo>" + line);

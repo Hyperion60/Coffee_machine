@@ -14,7 +14,7 @@ public class main_parser {
 
     public int main_parser_line(Globals lists, String input, ServerThread thread) {
         String type = input.split(":")[0];
-        int return_code = 0;
+        int return_code = -42;
         if (type.length() == 0) {
             return 1;
         }
@@ -38,10 +38,14 @@ public class main_parser {
                 }
                 break;
             case "bank":
-                if (thread.user == null)
+                if (thread.user == null) {
+                    thread.stream.ecrireReseau("Erreur : Vous n'êtes pas connecté");
                     return_code = -3;
-                else
+                } else {
+                    thread.user.recharge(Float.parseFloat(input.split(":")[1]));
                     return_code = 3;
+                }
+                break;
             default:
                 return_code = 0;
         }
