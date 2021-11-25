@@ -1,5 +1,6 @@
 package connexion;
 
+import Structures.Globals;
 import Structures.Privileges;
 
 public class User {
@@ -14,13 +15,6 @@ public class User {
         this.privileges = privileges;
         this.Password = password;
         this.bank = 0;
-    }
-
-    public User(User user) {
-        this.Name = user.getName();
-        this.privileges = user.getPrivileges();
-        this.Password = user.getPassword();
-        this.bank = user.getBank();
     }
 
     // Name
