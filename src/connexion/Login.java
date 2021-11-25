@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Login {
     private User user;
-    private static String Name,Password;
+    private String Name,Password;
 
 
 
@@ -28,7 +28,7 @@ public class Login {
     }
 
     //Parser
-    public static String parser(User user, String name_password)
+    public String parser(User user, String name_password)
     {
         String[] separation1 = name_password.split(":");
         String[] separation2 = separation1[1].split(",");
@@ -39,7 +39,7 @@ public class Login {
 
     //Logout
 
-    public static void logout()
+    public void logout()
     {
         System.out.println("logout");
     }
