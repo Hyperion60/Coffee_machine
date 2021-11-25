@@ -1,13 +1,18 @@
 package connexion;
 
+import Coffee.Command;
 import Structures.Globals;
 import Structures.Privileges;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private String Name;
     private String Password;
     private Privileges privileges;
     private float bank;
+    private List<Command> commands;
 
 
     public User(String name, String password, Privileges privileges) {
@@ -15,6 +20,7 @@ public class User {
         this.privileges = privileges;
         this.Password = password;
         this.bank = 0;
+        this.commands = new ArrayList<>();
     }
 
     // Name
