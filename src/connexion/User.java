@@ -8,11 +8,19 @@ public class User {
     private Privileges privileges;
     private float bank;
 
+
     public User(String name, String password, Privileges privileges) {
         this.Name = name;
         this.privileges = privileges;
         this.Password = password;
         this.bank = 0;
+    }
+
+    public User(User user) {
+        this.Name = user.getName();
+        this.privileges = user.getPrivileges();
+        this.Password = user.getPassword();
+        this.bank = user.getBank();
     }
 
     // Name
@@ -35,6 +43,10 @@ public class User {
         this.bank += value;
     }
 
+    public float getBank() {
+        return this.bank;
+    }
+
     public Privileges getPrivileges() {
         return this.privileges;
     }
@@ -46,6 +58,8 @@ public class User {
     public boolean checkPassword(String password) {
         return this.Password.equals(password);
     }
+
+    public String getPassword() { return this.Password; }
 
     public boolean setPassword(String old_password, String new_password) {
         if (!checkPassword(old_password))
