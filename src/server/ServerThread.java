@@ -1,6 +1,7 @@
 package server;
 
 import connexion.User;
+import parser.main_parser;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -14,9 +15,11 @@ public class ServerThread implements Runnable {
     private Thread thread;
     private IOCommandes file;
 
-    public ServerThread(Socket client, String path) throws IOException {
+    public ServerThread(Socket client, String path, Structures.Globals Lists) throws IOException {
+        this.Globals = Lists;
         this.client = client;
         this.file = new IOCommandes(path);
+        this.user = null;
     }
 
     public void setThread(Thread thread) {
@@ -29,8 +32,12 @@ public class ServerThread implements Runnable {
         IOCommandes my_stream = new IOCommandes(this.client);
         while (true) {
             line = my_stream.lireReseau();
-
             System.out.println("client>" + line);
+            // Parser
+            // Return string
+            this.Parser = new main_parser();
+            this.Parser.main_parser_line(this.Globals, line, this);
+            System.out.println("User" + this.user.getName());
             if (line != null) {
                 my_stream.ecrireEcran("echo>" + line);
                 try {
