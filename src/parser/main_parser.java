@@ -37,7 +37,7 @@ public class main_parser {
                     return_code = -2;
                 }
                 break;
-            case "bank":
+            case "Bank":
                 if (thread.user == null) {
                     thread.stream.ecrireReseau("Erreur : Vous n'êtes pas connecté");
                     return_code = -3;
@@ -46,6 +46,14 @@ public class main_parser {
                     return_code = 3;
                 }
                 break;
+            case "Cmd":
+                if (thread.user == null) {
+                    thread.stream.ecrireReseau("Erreur : Vous n'êtes pas connecté");
+                    return_code = -4;
+                } else {
+                    thread.user.commande(lists, input);
+                    return_code = 4;
+                }
             default:
                 return_code = 0;
         }

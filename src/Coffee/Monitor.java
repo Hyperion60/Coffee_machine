@@ -1,9 +1,11 @@
 package Coffee;
-
 import java.util.*;
 import java.time.LocalDateTime;
 
 public class Monitor {
+    private static List<String> default_status = new ArrayList<>(List.of("Off", "Brewing", "Holding", "Other", "Waiting"));
+    private static List<String> default_metric = new ArrayList<>(List.of("Espresso", "Demi-tasse", "Cup", "Mug", "Bucket"));
+
     private List<String> OpenStatus;
     private String OpenStatusDescription;
 
@@ -27,6 +29,12 @@ public class Monitor {
         this.NumberCoffee = 0;
         this.TempCoffee = 0f;
         this.Errors = new ArrayList<>();
+        for (String status: default_status) {
+            this.add_openstatus(status);
+        }
+        for (String metric: default_metric) {
+            this.add_Metric(metric);
+        }
     }
 
 
@@ -97,7 +105,7 @@ public class Monitor {
         return true;
     }
 
-    // Metric
+    // Metric : Coffee Type (espresso, demi-tasse...)
     public List<String> get_list_Metric() {
         return this.Metric;
     }
