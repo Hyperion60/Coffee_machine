@@ -87,7 +87,8 @@ public class main_parser {
             case "ProductList":
                 StringBuilder productlist = new StringBuilder("Liste des produits:");
                 for (Product product: lists.list_product) {
-                    productlist.append(product.getName()).append(",").append(product.getType()).append(";");
+                    productlist.append(product.getName()).append(",").append(product.getType());
+                    productlist.append(",").append(product.getPrice()).append(";");
                 }
                 thread.stream.ecrireReseau(productlist.toString());
                 break;
