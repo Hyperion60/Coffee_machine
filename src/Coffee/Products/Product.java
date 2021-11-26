@@ -10,8 +10,8 @@ public class Product {
     private int duree; // Nombre de secondes
     // Consommation de base
     private float coffee_consumption;
-    private float thea_consumption;
     private float milk_consumption;
+    private float thea_consumption;
 
     public Product(String name, String type, int duree, float temperature, float price,
                    float coffee_consumption, float thea_consumption, float milk_consumption) {
