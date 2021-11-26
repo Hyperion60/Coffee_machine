@@ -25,5 +25,6 @@ public class Command {
 
     public void BeginPreparation() {
         this.begin_date = LocalDateTime.now();
+        this.state = CommandState.PROGRESS;
     }
 }
