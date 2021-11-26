@@ -3,8 +3,9 @@ package parser;
 import Coffee.Products.Product;
 import Structures.CommandState;
 import Structures.Globals;
+import Structures.Privileges;
 import connexion.Login;
-import connexion.User;
+import parser.admin_parser;
 import server.ServerThread;
 
 public class main_parser {
@@ -93,8 +94,12 @@ public class main_parser {
                 thread.stream.ecrireReseau(productlist.toString());
                 break;
             default:
-                thread.stream.ecrireReseau("Erreur : Commande inconnue");
-                return_code = 0;
+                if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {
+                    admin_parser.parser_admin_cmds(lists, thread, input);
+                } else {
+                    thread.stream.ecrireReseau("Erreur : Commande inconnue");
+                    return_code = 0;
+                }
         }
         return return_code;
     }
