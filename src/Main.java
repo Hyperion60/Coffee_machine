@@ -1,6 +1,7 @@
 import Structures.Globals;
 import Structures.Privileges;
 import connexion.User;
+import server.AJAXServer;
 import server.ServerThread;
 
 import java.io.IOException;
@@ -24,6 +25,10 @@ public class Main {
             System.exit(1);
         }
 
+        AJAXServer ajaxServer = new AJAXServer(lists);
+        Thread ajaxThread = new Thread(ajaxServer);
+        ajaxThread.start();
+        ajaxServer.setThread(ajaxThread);
         Socket new_client = null;
         while (true) {
             try {
@@ -41,8 +46,6 @@ public class Main {
                 System.out.println("Thread lancé");
                 new_client = null;
             }
-
-
         }
     }
 

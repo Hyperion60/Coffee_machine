@@ -11,6 +11,7 @@ public class Machine {
     //1.declaration
     private String Norme;
     private int Capacity;
+    protected int Cafe_servis;
     private List<String> Type;
     private String Location;
     private Monitor Monitor;
@@ -22,10 +23,18 @@ public class Machine {
     {
         this.Norme = "Vendor description";
         this.Capacity = 0;
+        this.Cafe_servis = 0;
         this.Type = new ArrayList<>();
         this.Location = "Emplacement machine";
         this.Monitor = new Monitor();
         this.list_command = new ArrayList<>();
+    }
+
+    protected int second_remain(Command command) {
+        int delta_time = Math.toIntExact(command.begin_date.atZone(ZoneId.systemDefault()).toEpochSecond());
+        delta_time += command.product.getDuree();
+        delta_time -= Math.toIntExact(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond());
+        return delta_time;
     }
 
     // Command
@@ -39,10 +48,7 @@ public class Machine {
             return "Commande terminée ou non traitée";
         }
         if (this.list_command.get(0).equals(command) && this.list_command.get(0).state.equals(CommandState.PROGRESS)) {
-            int second_remain = Math.toIntExact(command.begin_date.atZone(ZoneId.systemDefault()).toEpochSecond());
-            second_remain += command.product.getDuree();
-            second_remain -= Math.toIntExact(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond());
-            return "En cours de préparation, temps restant : " + second_remain;
+            return "En cours de préparation, temps restant:" + second_remain(command) + "/" + command.product.getDuree() + " secondes";
         }
         int i = 0;
         for (Command cmd: this.list_command) {
@@ -54,6 +60,20 @@ public class Machine {
         return "Commande terminée";
     }
 
+    public void RefreshCommand() {
+        if (this.list_command.size() == 0)
+            return;
+        if (this.list_command.get(0).state != CommandState.PROGRESS) {
+            this.list_command.get(0).BeginPreparation();
+        } else {
+            int delta = second_remain(this.list_command.get(0));
+            if (delta < 0) {
+                this.list_command.get(0).state = CommandState.FINISH;
+                this.list_command.remove(0);
+                this.Cafe_servis += 1;
+            }
+        }
+    }
 
     //Norme
     public String get_string_norme() {
