@@ -39,7 +39,9 @@ public class main_parser {
                 if (thread.user != null){
                     return_code = 2;
                     thread.user = null;
+                    thread.stream.ecrireReseau("Vous avez été déconnecté !");
                 } else {
+                    thread.stream.ecrireReseau("Erreur: Vous n'êtes pas connecté !");
                     return_code = -2;
                 }
                 break;
