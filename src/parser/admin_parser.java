@@ -1,8 +1,11 @@
 package parser;
 
 import Coffee.Products.Product;
+import Coffee.Products.Taille;
 import Structures.Globals;
 import server.ServerThread;
+
+import javax.management.InstanceAlreadyExistsException;
 
 public class admin_parser {
     private static Product add_product(ServerThread thread, String line) {
@@ -145,6 +148,32 @@ public class admin_parser {
             thread.stream.ecrireReseau("Modification effectuée avec succès !");
     }
 
+    private static Taille add_taille(Globals lists, ServerThread thread, String line) {
+        Taille new_taille;
+        String[] data = line.split(":")[1].split(",");
+
+        try {
+            if (lists.search_taille_name(data[0]) != null)
+                throw new InstanceAlreadyExistsException();
+            new_taille = new Taille(
+                    data[0],
+                    Float.parseFloat(data[1]),
+                    Float.parseFloat(data[2]),
+                    Float.parseFloat(data[3]),
+                    Float.parseFloat(data[4]));
+        } catch (InstanceAlreadyExistsException e) {
+            thread.stream.ecrireReseau("Erreur: Cette taille existe déjà !");
+            return null;
+        } catch (NumberFormatException e) {
+            thread.stream.ecrireReseau("Erreur: Format du nombre de café, thé ou lait invalide !");
+            return null;
+        } catch (ArithmeticException e) {
+            thread.stream.ecrireReseau("Erreur: Valeur de café, thé et lait ne peut pas être négatif !");
+            return null;
+        }
+        return new_taille;
+    }
+
     public static void parser_admin_cmds(Globals lists, ServerThread thread, String input) {
         String type = input.split(":")[0];
         switch (type) {
@@ -187,6 +216,28 @@ public class admin_parser {
                 } else {
                     thread.stream.ecrireReseau("Produit supprimé avec succès !");
                 }
+                break;
+            case "TailleAdd":
+                Taille new_taille = add_taille(lists, thread, input);
+                if (new_taille != null) {
+                    lists.list_taille.add(new_taille);
+                    thread.stream.ecrireReseau("Taille ajoutée avec succès !");
+                }
+                break;
+            case "TailleRemove":
+                name = input.split(":")[1];
+                found = false;
+                for (Taille taille: lists.list_taille) {
+                    if (taille.taille.equals(name)) {
+                        lists.list_taille.remove(taille);
+                        found = true;
+                        break;
+                    }
+                }
+                if (found)
+                    thread.stream.ecrireReseau("Taille supprimée avec succès !");
+                else
+                    thread.stream.ecrireReseau("Error: Taille non trouvée !");
                 break;
             default:
                 thread.stream.ecrireReseau("Erreur:Commande introuvable !");

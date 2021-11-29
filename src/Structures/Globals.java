@@ -30,9 +30,9 @@ public class Globals {
         this.server_port = 867;
 
         this.list_taille = new ArrayList<>();
-        this.list_taille.add(new Taille("Tasse", 2.9f, 1.5f, 1.0f));
-        this.list_taille.add(new Taille("Demi-Tasse", 1.5f, 0.7f, 0.5f));
-        this.list_taille.add(new Taille("Quart-Tasse", 0.7f, 0.35f, 0.2f));
+        this.list_taille.add(new Taille("Tasse", 2.9f, 1.5f, 1.0f, 1.5f));
+        this.list_taille.add(new Taille("Demi-Tasse", 1.5f, 0.7f, 0.5f, 1.0f));
+        this.list_taille.add(new Taille("Quart-Tasse", 0.7f, 0.35f, 0.2f, 0.5f));
 
         this.list_product = new ArrayList<>();
         this.list_product.add(new Product("Café", "Café Long", 10, 90f, 0.8f, 1f, 0f, 0f));
@@ -41,5 +41,13 @@ public class Globals {
         this.list_product.add(new Product("Chocolat", "Normal", 20, 80f, 1.05f, 0f, 0f, 1f));
     }
 
+    public Taille search_taille_name(String name) {
+        for (Taille taille: this.list_taille) {
+            if (taille.taille.equals(name)) {
+                return taille;
+            }
+        }
+        return null;
+    }
 
 }

@@ -1,11 +1,11 @@
 package parser;
 
 import Coffee.Products.Product;
+import Coffee.Products.Taille;
 import Structures.CommandState;
 import Structures.Globals;
 import Structures.Privileges;
 import connexion.Login;
-import parser.admin_parser;
 import server.ServerThread;
 
 public class main_parser {
@@ -92,6 +92,15 @@ public class main_parser {
                     productlist.append(",").append(product.getPrice()).append(";");
                 }
                 thread.stream.ecrireReseau(productlist.toString());
+                break;
+            case "TailleList":
+                StringBuilder taillelist = new StringBuilder("Liste des tailles:");
+                for (Taille taille: lists.list_taille) {
+                    taillelist.append(taille.taille).append(",").append(taille.coffee_consumption).append(",");
+                    taillelist.append(taille.thea_consumption).append(",").append(taille.milk_consumption);
+                    taillelist.append(",").append(taille.price_coef).append(";");
+                }
+                thread.stream.ecrireReseau(taillelist.toString());
                 break;
             default:
                 if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {

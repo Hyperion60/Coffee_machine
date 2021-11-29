@@ -31,12 +31,16 @@ public class ServerThread implements Runnable {
     public void run() {
         String line;
         stream = new IOCommandes(this.client);
+        this.Parser = new main_parser();
         while (true) {
             line = stream.lireReseau();
             System.out.println("client>" + line);
             // Parser
             // Return string
-            this.Parser = new main_parser();
+            System.out.println(line.length());
+            if (line.length() == 0) {
+                this.stream.ecrireReseau("Erreur: Commande inconnue !");
+            }
             this.Parser.main_parser_line(this.Globals, line, this);
             for (User user: this.Globals.list_user) {
                 System.out.println("User : " + user.getName());
