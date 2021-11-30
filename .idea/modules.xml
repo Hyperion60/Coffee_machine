@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Coffee_machine.iml" filepath="$PROJECT_DIR$/Coffee_machine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Interface graphique.iml" filepath="$PROJECT_DIR$/Interface graphique.iml" />
     </modules>
   </component>
 </project>
