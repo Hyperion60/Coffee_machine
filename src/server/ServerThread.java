@@ -23,6 +23,7 @@ public class ServerThread implements Runnable {
         this.user = null;
     }
 
+
     public void setThread(Thread thread) {
         this.thread = thread;
     }
