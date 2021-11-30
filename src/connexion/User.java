@@ -2,6 +2,7 @@ package connexion;
 
 import Coffee.Command;
 import Coffee.Products.Product;
+import Coffee.Products.Taille;
 import Structures.Globals;
 import Structures.Privileges;
 import server.ServerThread;
@@ -28,7 +29,8 @@ public class User {
     public Command newCommand(Globals lists, ServerThread client, String name, String type, String taille) {
         Product selected = null;
         Command new_command;
-        if (lists.search_taille_name(taille) == null) {
+        Taille taille1;
+        if ((taille1 = lists.search_taille_name(taille)) == null) {
             client.stream.ecrireReseau("Erreur: Taille inconnue !");
             return null;
         }
@@ -43,17 +45,17 @@ public class User {
                 client.stream.ecrireReseau("Erreur: Solde insuffisant");
                 return null;
             }
-            if (lists.coffee.Remain_Coffee < selected.getCoffee_consumption() ||
-                lists.coffee.Remain_Thea < selected.getThea_consumption() ||
-                lists.coffee.Remain_Milk < selected.getMilk_consumption()) {
+            if (lists.coffee.Remain_Coffee < selected.getCoffee_consumption() * taille1.coffee_consumption ||
+                lists.coffee.Remain_Thea < selected.getThea_consumption() * taille1.thea_consumption ||
+                lists.coffee.Remain_Milk < selected.getMilk_consumption() * taille1.milk_consumption) {
                 client.stream.ecrireReseau("Erreur: Stock insuffisant");
                 return null;
             }
-            lists.coffee.Remain_Coffee -= selected.getCoffee_consumption();
-            lists.coffee.Remain_Thea -= selected.getThea_consumption();
-            lists.coffee.Remain_Milk -= selected.getMilk_consumption();
+            lists.coffee.Remain_Coffee -= selected.getCoffee_consumption() * taille1.coffee_consumption;
+            lists.coffee.Remain_Thea -= selected.getThea_consumption() * taille1.thea_consumption;
+            lists.coffee.Remain_Milk -= selected.getMilk_consumption() * taille1.milk_consumption;
             this.bank -= selected.getPrice();
-            new_command = new Command(selected);
+            new_command = new Command(selected, taille1);
             this.commands.add(new_command);
             client.stream.ecrireReseau("Commande de " + this.commands.get(this.commands.size() - 1).product.getName() + this.commands.get(this.commands.size() - 1).product.getType() + "effectuée succès");
             return new_command;

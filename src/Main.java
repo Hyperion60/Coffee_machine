@@ -24,11 +24,6 @@ public class Main {
             e.printStackTrace();
             System.exit(1);
         }
-
-        AJAXServer ajaxServer = new AJAXServer(lists);
-        Thread ajaxThread = new Thread(ajaxServer);
-        ajaxThread.start();
-        ajaxServer.setThread(ajaxThread);
         Socket new_client = null;
         while (true) {
             try {

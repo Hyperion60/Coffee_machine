@@ -1,6 +1,7 @@
 package Coffee;
 
 import Structures.CommandState;
+import Structures.Globals;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -73,8 +74,10 @@ public class Machine {
     public void RefreshCommand() {
         if (this.list_command.size() == 0)
             return;
-        if (this.list_command.get(0).state != CommandState.PROGRESS) {
+        if (this.list_command.get(0).state == CommandState.WAITING) {
             this.list_command.get(0).BeginPreparation();
+        } else if (this.list_command.get(0).state == CommandState.CANCELLED) {
+            this.list_command.remove(0);
         } else {
             int delta = second_remain(this.list_command.get(0));
             if (delta < 0) {
@@ -83,6 +86,20 @@ public class Machine {
                 this.Cafe_servis += 1;
             }
         }
+    }
+
+    public int CancelCmds(Globals lists) {
+        int i = 0;
+        for (Command command: this.list_command) {
+            if (command.state.equals(CommandState.WAITING)) {
+                command.state = CommandState.CANCELLED;
+                lists.coffee.Remain_Coffee += command.product.getCoffee_consumption() * command.taille.coffee_consumption;
+                lists.coffee.Remain_Thea += command.product.getThea_consumption() * command.taille.thea_consumption;
+                lists.coffee.Remain_Milk += command.product.getMilk_consumption() * command.taille.milk_consumption;
+                ++i;
+            }
+        }
+        return i;
     }
 
     //Norme

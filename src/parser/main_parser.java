@@ -84,6 +84,8 @@ public class main_parser {
                     thread.stream.ecrireReseau("Vous n'avez passé aucune commande");
                 } else if (thread.user.commands.get(thread.user.commands.size() - 1).state.equals(CommandState.FINISH)) {
                     thread.stream.ecrireReseau("Toutes vos commandes sont terminées");
+                } else if (thread.user.commands.get(thread.user.commands.size() - 1).state == CommandState.CANCELLED) {
+                    thread.stream.ecrireReseau("Votre commande a été annulée");
                 } else {
                     thread.stream.ecrireReseau(lists.coffee.ProgressCommand(thread.user.commands.get(thread.user.commands.size() - 1)));
                 }
@@ -104,6 +106,12 @@ public class main_parser {
                     taillelist.append(",").append(taille.price_coef).append(";");
                 }
                 thread.stream.ecrireReseau(taillelist.toString());
+                break;
+            case "StockGet":
+                String stocklist = "Stocks:" + "coffee," + lists.coffee.Remain_Coffee + "/" + lists.coffee.Capacity_Coffee + ";" +
+                        "thea," + lists.coffee.Remain_Thea + "/" + lists.coffee.Capacity_Thea + ";" +
+                        "milk," + lists.coffee.Remain_Milk + "/" + lists.coffee.Capacity_Milk + ";";
+                thread.stream.ecrireReseau(stocklist);
                 break;
             default:
                 if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {

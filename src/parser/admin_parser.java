@@ -1,11 +1,13 @@
 package parser;
 
+import Coffee.Command;
 import Coffee.Products.Product;
 import Coffee.Products.Taille;
 import Structures.Globals;
 import server.ServerThread;
 
 import javax.management.InstanceAlreadyExistsException;
+import java.util.Locale;
 
 public class admin_parser {
     private static Product add_product(ServerThread thread, String line) {
@@ -188,7 +190,7 @@ public class admin_parser {
                 String name = input.split(":")[1].split(",")[0];
                 type = input.split(":")[1].split(",")[1];
                 boolean found = false;
-                for (Product product: lists.list_product) {
+                for (Product product : lists.list_product) {
                     if (product.getName().equals(name) && product.getType().equals(type)) {
                         modify_product(thread, product, input);
                         found = true;
@@ -203,7 +205,7 @@ public class admin_parser {
                 type = input.split(":")[1].split(",")[1];
                 found = false;
                 int i = 0;
-                for (Product product: lists.list_product) {
+                for (Product product : lists.list_product) {
                     if (product.getName().equals(name) && product.getType().equals(type)) {
                         lists.list_product.remove(i);
                         found = true;
@@ -227,7 +229,7 @@ public class admin_parser {
             case "TailleRemove":
                 name = input.split(":")[1];
                 found = false;
-                for (Taille taille: lists.list_taille) {
+                for (Taille taille : lists.list_taille) {
                     if (taille.taille.equals(name)) {
                         lists.list_taille.remove(taille);
                         found = true;
@@ -238,6 +240,95 @@ public class admin_parser {
                     thread.stream.ecrireReseau("Taille supprimée avec succès !");
                 else
                     thread.stream.ecrireReseau("Error: Taille non trouvée !");
+                break;
+            case "CancelCmds":
+                int nb = lists.coffee.CancelCmds(lists);
+                thread.stream.ecrireReseau(nb + " commandes annulées");
+                break;
+            case "StockAdd":
+                String quantity;
+                try {
+                    name = input.split(":")[1].split(",")[0];
+                    quantity = input.split(":")[1].split(",")[1];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    thread.stream.ecrireReseau("Erreur: Arguments manquants !");
+                    name = null;
+                    quantity = null;
+                }
+                try {
+                    if (quantity != null && Float.parseFloat(quantity) < 0) {
+                        thread.stream.ecrireReseau("Erreur: La quantité ne peut pas être négative.");
+                        quantity = null;
+                    }
+                } catch (NumberFormatException e) {
+                    thread.stream.ecrireReseau("Erreur: Format de quantité invalide.");
+                }
+
+                if (quantity != null && name != null) {
+                    switch (name) {
+                        case "coffee" -> {
+                            lists.coffee.Remain_Coffee += Float.parseFloat(quantity);
+                            if (lists.coffee.Remain_Coffee > lists.coffee.Capacity_Coffee)
+                                lists.coffee.Remain_Coffee = lists.coffee.Capacity_Coffee;
+                            thread.stream.ecrireReseau("Stock de café rechargé avec succès");
+                        }
+                        case "thea" -> {
+                            lists.coffee.Remain_Thea += Float.parseFloat(quantity);
+                            if (lists.coffee.Remain_Thea > lists.coffee.Capacity_Thea)
+                                lists.coffee.Remain_Thea = lists.coffee.Capacity_Thea;
+                            thread.stream.ecrireReseau("Stock de thé rechargé avec succès");
+                        }
+                        case "milk" -> {
+                            lists.coffee.Remain_Milk += Float.parseFloat(quantity);
+                            if (lists.coffee.Remain_Milk > lists.coffee.Capacity_Milk)
+                                lists.coffee.Remain_Milk = lists.coffee.Capacity_Milk;
+                            thread.stream.ecrireReseau("Stock de lait rechargé avec succès");
+                        }
+                        default -> thread.stream.ecrireReseau("Erreur:Nom de stock introuvable !");
+                    }
+                }
+                break;
+            case "CapacityMod":
+                try {
+                    name = input.split(":")[1].split(",")[0];
+                    quantity = input.split(":")[1].split(",")[1];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    thread.stream.ecrireReseau("Erreur: Arguments manquants !");
+                    name = null;
+                    quantity = null;
+                }
+                try {
+                    if (quantity != null && Float.parseFloat(quantity) < 0) {
+                        thread.stream.ecrireReseau("Erreur: La quantité ne peut pas être négative.");
+                        quantity = null;
+                    }
+                } catch (NumberFormatException e) {
+                    thread.stream.ecrireReseau("Erreur: Format de quantité invalide.");
+                }
+
+                if (quantity != null && name != null) {
+                    switch (name) {
+                        case "coffee" -> {
+                            lists.coffee.Capacity_Coffee = Integer.parseInt(quantity);
+                            thread.stream.ecrireReseau("Capacité de café modifié avec succès");
+                            if (lists.coffee.Remain_Coffee > lists.coffee.Capacity_Coffee)
+                                lists.coffee.Remain_Coffee = lists.coffee.Capacity_Coffee;
+                        }
+                        case "thea" -> {
+                            lists.coffee.Capacity_Thea = Integer.parseInt(quantity);
+                            thread.stream.ecrireReseau("Capacité de thé modifié avec succès");
+                            if (lists.coffee.Remain_Thea > lists.coffee.Capacity_Thea)
+                                lists.coffee.Remain_Thea = lists.coffee.Capacity_Thea;
+                        }
+                        case "milk" -> {
+                            lists.coffee.Capacity_Milk = Integer.parseInt(quantity);
+                            thread.stream.ecrireReseau("Capacité de lait avec succès");
+                            if (lists.coffee.Remain_Milk > lists.coffee.Capacity_Milk)
+                                lists.coffee.Remain_Milk = lists.coffee.Capacity_Milk;
+                        }
+                        default -> thread.stream.ecrireReseau("Erreur:Nom de stock introuvable !");
+                    }
+                }
                 break;
             default:
                 thread.stream.ecrireReseau("Erreur:Commande introuvable !");

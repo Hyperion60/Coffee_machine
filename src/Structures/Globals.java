@@ -6,6 +6,7 @@ import Coffee.Products.Taille;
 import connexion.Login;
 import connexion.Signup;
 import connexion.User;
+import server.AJAXServer;
 import server.ServerThread;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class Globals {
     public Signup signup;
     public Login login;
     public int server_port;
+    public AJAXServer ajaxServer;
+    public Thread ajaxThread;
 
     public Globals() {
         this.list_user = new ArrayList<>();
@@ -28,6 +31,11 @@ public class Globals {
         this.signup = new Signup();
         this.login = new Login();
         this.server_port = 867;
+
+        this.ajaxServer = new AJAXServer(this);
+        this.ajaxThread = new Thread(this.ajaxServer);
+        this.ajaxThread.start();
+        this.ajaxServer.setThread(this.ajaxThread);
 
         this.list_taille = new ArrayList<>();
         this.list_taille.add(new Taille("Tasse", 2.9f, 1.5f, 1.0f, 1.5f));
