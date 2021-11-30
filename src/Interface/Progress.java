@@ -15,13 +15,13 @@ public class Progress implements Runnable {
                 // fill the menu bar
                 mainFrame.getRestantCafe().setValue(i - 1);
                 mainFrame.getRestantLait().setValue(i - 1);
-                mainFrame.getRestantThé().setValue(i - 1);
+                mainFrame.getRestantThe().setValue(i - 1);
                 mainFrame.getStatutPreparation().setValue(100 - i);
                 // delay the thread
                 Thread.sleep(500);
                 i -= 1;
             }
-        }catch (Exception e) {
+        }catch (Exception e) {System.out.println("Interrupted exeption");
         }
     }
 }
