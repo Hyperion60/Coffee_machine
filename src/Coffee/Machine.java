@@ -22,11 +22,11 @@ public class Machine {
     private String Location;
     private Monitor Monitor;
     private List<Command> list_command;
+    public State state;
 
 
     //2.initialisation
-    public Machine()
-    {
+    public Machine() {
         this.Norme = "Vendor description";
         this.Capacity_Coffee = 15;
         this.Capacity_Thea = 15;
@@ -39,6 +39,7 @@ public class Machine {
         this.Location = "Emplacement machine";
         this.Monitor = new Monitor();
         this.list_command = new ArrayList<>();
+        this.state = State.IDLE;
     }
 
     protected int second_remain(Command command) {
@@ -72,12 +73,18 @@ public class Machine {
     }
 
     public void RefreshCommand() {
-        if (this.list_command.size() == 0)
+        if (this.list_command.size() == 0) {
+            this.state = State.IDLE;
             return;
+        }
         if (this.list_command.get(0).state == CommandState.WAITING) {
+            this.state = State.WORKING;
             this.list_command.get(0).BeginPreparation();
         } else if (this.list_command.get(0).state == CommandState.CANCELLED) {
-            this.list_command.remove(0);
+            do {
+                this.state = State.IDLE;
+                this.list_command.remove(0);
+            } while (this.list_command.get(0).state == CommandState.CANCELLED);
         } else {
             int delta = second_remain(this.list_command.get(0));
             if (delta < 0) {
@@ -100,6 +107,10 @@ public class Machine {
             }
         }
         return i;
+    }
+
+    public boolean workingCmd() {
+        return this.list_command.size() != 0;
     }
 
     //Norme

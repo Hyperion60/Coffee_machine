@@ -3,6 +3,7 @@ package parser;
 import Coffee.Command;
 import Coffee.Products.Product;
 import Coffee.Products.Taille;
+import Coffee.State;
 import Structures.Globals;
 import server.ServerThread;
 
@@ -329,6 +330,12 @@ public class admin_parser {
                         default -> thread.stream.ecrireReseau("Erreur:Nom de stock introuvable !");
                     }
                 }
+                break;
+            case "Poweroff":
+                lists.coffee.state = State.OFFLINE;
+                lists.coffee.CancelCmds(lists);
+                while (lists.coffee.workingCmd()) {}
+                lists.coffee.state = State.OFFLINE;
                 break;
             default:
                 thread.stream.ecrireReseau("Erreur:Commande introuvable !");

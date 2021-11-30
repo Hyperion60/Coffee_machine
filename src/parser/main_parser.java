@@ -3,17 +3,46 @@ package parser;
 import Coffee.Command;
 import Coffee.Products.Product;
 import Coffee.Products.Taille;
+import Coffee.State;
 import Structures.CommandState;
 import Structures.Globals;
 import Structures.Privileges;
 import connexion.Login;
 import server.ServerThread;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+
 public class main_parser {
     private Login login;
+    private State state_obj;
 
     public main_parser() {
         this.login = new Login();
+    }
+
+    private String getLocalIP() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface iface = interfaces.nextElement();
+                if (iface.isLoopback() || !iface.isUp())
+                    continue;
+
+                Enumeration<InetAddress> addresses = iface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress addr = addresses.nextElement();
+                    System.out.println(iface.getDisplayName() + " " + addr.getHostAddress());
+                    if (!iface.getDisplayName().contains("Virtual") && !iface.getDisplayName().contains("VM"))
+                        return addr.getHostAddress();
+                }
+            }
+        } catch (SocketException e) {
+            System.out.println("Failed to load Network Interfaces");
+        }
+        return null;
     }
 
     public void main_parser_line(Globals lists, String input, ServerThread thread) {
@@ -112,6 +141,17 @@ public class main_parser {
                         "thea," + lists.coffee.Remain_Thea + "/" + lists.coffee.Capacity_Thea + ";" +
                         "milk," + lists.coffee.Remain_Milk + "/" + lists.coffee.Capacity_Milk + ";";
                 thread.stream.ecrireReseau(stocklist);
+                break;
+            case "MachineState":
+                switch (lists.coffee.state) {
+                    case OFFLINE -> thread.stream.ecrireReseau("Hors ligne");
+                    case IDLE -> thread.stream.ecrireReseau("Au repos");
+                    case WORKING -> thread.stream.ecrireReseau("En fonction");
+                    default -> thread.stream.ecrireReseau("?");
+                }
+                break;
+            case "MachineNetwork":
+                thread.stream.ecrireReseau("IP:" + getLocalIP() + ",Port:" + lists.server_port);
                 break;
             default:
                 if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {
