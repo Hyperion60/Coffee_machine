@@ -38,17 +38,14 @@ public class ServerThread implements Runnable {
             System.out.println("client>" + line);
             // Parser
             // Return string
-            System.out.println(line.length());
             if (line.length() == 0) {
                 this.stream.ecrireReseau("Erreur: Commande inconnue !");
             }
             this.Parser.main_parser_line(this.Globals, line, this);
-            for (User user: this.Globals.list_user) {
-                System.out.println("User : " + user.getName());
-                System.out.println("Bank : " + user.getBank());
-            }
+            System.out.println("Stock café : " + this.Globals.coffee.Remain_Coffee + "/" + this.Globals.coffee.Capacity_Coffee);
+            System.out.println("Stock thé : " + this.Globals.coffee.Remain_Thea + "/" + this.Globals.coffee.Capacity_Thea);
+            System.out.println("Stock lait : " + this.Globals.coffee.Remain_Milk + "/" + this.Globals.coffee.Capacity_Milk);
 
-            stream.ecrireEcran("echo>" + line);
             try {
                 this.file.lireFichier();
             } catch (IOException exception) {

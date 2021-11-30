@@ -10,7 +10,12 @@ import java.util.List;
 public class Machine {
     //1.declaration
     private String Norme;
-    private int Capacity;
+    public int Capacity_Coffee;
+    public int Capacity_Thea;
+    public int Capacity_Milk;
+    public float Remain_Coffee;
+    public float Remain_Thea;
+    public float Remain_Milk;
     protected int Cafe_servis;
     private List<String> Type;
     private String Location;
@@ -22,7 +27,12 @@ public class Machine {
     public Machine()
     {
         this.Norme = "Vendor description";
-        this.Capacity = 0;
+        this.Capacity_Coffee = 15;
+        this.Capacity_Thea = 15;
+        this.Capacity_Milk = 15;
+        this.Remain_Coffee = 10f;
+        this.Remain_Milk = 10f;
+        this.Remain_Thea = 10f;
         this.Cafe_servis = 0;
         this.Type = new ArrayList<>();
         this.Location = "Emplacement machine";
@@ -88,12 +98,12 @@ public class Machine {
 
     //Capacity
     public int get_string_Capacity(){
-        return this.Capacity;
+        return this.Capacity_Coffee;
     }
     public boolean set_int_Capacity(int capacity_status){
         if(capacity_status <= 0)
             return false;
-        this.Capacity=capacity_status;
+        this.Capacity_Coffee =capacity_status;
         return true;
     }
     //Type

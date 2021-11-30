@@ -25,8 +25,13 @@ public class User {
         this.commands = new ArrayList<>();
     }
 
-    public boolean newCommand(Globals lists, ServerThread client, String name, String type) {
+    public Command newCommand(Globals lists, ServerThread client, String name, String type, String taille) {
         Product selected = null;
+        Command new_command;
+        if (lists.search_taille_name(taille) == null) {
+            client.stream.ecrireReseau("Erreur: Taille inconnue !");
+            return null;
+        }
         for (Product product: lists.list_product) {
             if (product.getType().equals(type) && product.getName().equals(name)) {
                 selected = product;
@@ -36,14 +41,25 @@ public class User {
         if (selected != null) {
             if (this.bank < selected.getPrice()) {
                 client.stream.ecrireReseau("Erreur: Solde insuffisant");
-                return false;
+                return null;
             }
-            this.commands.add(new Command(selected));
+            if (lists.coffee.Remain_Coffee < selected.getCoffee_consumption() ||
+                lists.coffee.Remain_Thea < selected.getThea_consumption() ||
+                lists.coffee.Remain_Milk < selected.getMilk_consumption()) {
+                client.stream.ecrireReseau("Erreur: Stock insuffisant");
+                return null;
+            }
+            lists.coffee.Remain_Coffee -= selected.getCoffee_consumption();
+            lists.coffee.Remain_Thea -= selected.getThea_consumption();
+            lists.coffee.Remain_Milk -= selected.getMilk_consumption();
+            this.bank -= selected.getPrice();
+            new_command = new Command(selected);
+            this.commands.add(new_command);
             client.stream.ecrireReseau("Commande de " + this.commands.get(this.commands.size() - 1).product.getName() + this.commands.get(this.commands.size() - 1).product.getType() + "effectuée succès");
-            return true;
+            return new_command;
         }
         client.stream.ecrireReseau("Erreur: Le produit n'existe pas.");
-        return false;
+        return null;
     }
 
     // Name

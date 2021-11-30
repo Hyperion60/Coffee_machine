@@ -70,11 +70,23 @@ public class Product {
         this.coffee_consumption = coffee_consumption;
     }
 
+    public float getCoffee_consumption() {
+        return coffee_consumption;
+    }
+
     public void setMilk_consumption(float milk_consumption) {
         this.milk_consumption = milk_consumption;
     }
 
+    public float getMilk_consumption() {
+        return milk_consumption;
+    }
+
     public void setThea_consumption(float thea_consumption) {
         this.thea_consumption = thea_consumption;
+    }
+
+    public float getThea_consumption() {
+        return thea_consumption;
     }
 }

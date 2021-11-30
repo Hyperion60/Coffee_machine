@@ -1,5 +1,6 @@
 package parser;
 
+import Coffee.Command;
 import Coffee.Products.Product;
 import Coffee.Products.Taille;
 import Structures.CommandState;
@@ -15,11 +16,10 @@ public class main_parser {
         this.login = new Login();
     }
 
-    public int main_parser_line(Globals lists, String input, ServerThread thread) {
+    public void main_parser_line(Globals lists, String input, ServerThread thread) {
         String type = input.split(":")[0];
-        int return_code = -42;
         if (type.length() == 0) {
-            return 1;
+            return;
         }
         switch (type) {
             case "Login":
@@ -38,22 +38,18 @@ public class main_parser {
                 break;
             case "Logout":
                 if (thread.user != null){
-                    return_code = 2;
                     thread.user = null;
                     thread.stream.ecrireReseau("Vous avez été déconnecté !");
                 } else {
                     thread.stream.ecrireReseau("Erreur: Vous n'êtes pas connecté !");
-                    return_code = -2;
                 }
                 break;
             case "Bank":
                 if (thread.user == null) {
                     thread.stream.ecrireReseau("Erreur : Vous n'êtes pas connecté");
-                    return_code = -3;
                 } else if (input.split(":").length == 2) {
                     thread.user.recharge(Float.parseFloat(input.split(":")[1]));
                     thread.stream.ecrireReseau("Compte rechargé avec succès, solde actuel : " + thread.user.getBank());
-                    return_code = 3;
                 } else {
                     thread.stream.ecrireReseau("Solde actuel : " + thread.user.getBank() + "€");
                 }
@@ -61,16 +57,23 @@ public class main_parser {
             case "Cmd":
                 if (thread.user == null) {
                     thread.stream.ecrireReseau("Erreur : Vous n'êtes pas connecté");
-                    return_code = -4;
                 } else {
-                    String product_name = input.split(":")[1].split(",")[0];
-                    String product_type = input.split(":")[1].split(",")[1];
-                    if (!thread.user.newCommand(lists, thread, product_name, product_type)) {
-                        // Log file
-                        return_code = -4;
-                    } else {
-                        lists.coffee.AddCommand(thread.user.commands.get(thread.user.commands.size() - 1));
-                        return_code = 4;
+                    String product_name, product_type, cmd_taille;
+                    try {
+                        product_name = input.split(":")[1].split(",")[0];
+                        product_type = input.split(":")[1].split(",")[1];
+                        cmd_taille = input.split(":")[1].split(",")[2];
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        thread.stream.ecrireReseau("Erreur: Arguments manquants !");
+                        product_name = null;
+                        product_type = null;
+                        cmd_taille = null;
+                    }
+                    if (cmd_taille != null) {
+                        Command command;
+                        if ((command = thread.user.newCommand(lists, thread, product_name, product_type, cmd_taille)) != null) {
+                            lists.coffee.AddCommand(command);
+                        }
                     }
                 }
                 break;
@@ -107,9 +110,7 @@ public class main_parser {
                     admin_parser.parser_admin_cmds(lists, thread, input);
                 } else {
                     thread.stream.ecrireReseau("Erreur : Commande inconnue");
-                    return_code = 0;
                 }
         }
-        return return_code;
     }
 }
