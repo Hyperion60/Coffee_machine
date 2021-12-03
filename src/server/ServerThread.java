@@ -38,6 +38,11 @@ public class ServerThread implements Runnable {
             System.out.println("client>" + line);
             // Parser
             // Return string
+            if (line == null) {
+                this.Globals.list_client.remove(this);
+                this.stream.ecrireEcran("Client déconnecté !");
+                break;
+            }
             if (line.length() == 0) {
                 this.stream.ecrireReseau("Erreur: Commande inconnue !");
             }
@@ -53,9 +58,6 @@ public class ServerThread implements Runnable {
             }
             this.file.ecrireFichier("IP:" + this.client.getInetAddress().toString() + " - " + LocalDateTime.now());
             this.file.ecrireFichier(line);
-            if (line.equals("quit")) {
-                break;
-            }
         }
     }
     public boolean status() {

@@ -153,6 +153,9 @@ public class main_parser {
             case "MachineNetwork":
                 thread.stream.ecrireReseau("IP:" + getLocalIP() + ",Port:" + lists.server_port);
                 break;
+            case "ClientStat":
+                thread.stream.ecrireReseau("Nombre de client:" + lists.list_client.size());
+                break;
             default:
                 if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {
                     admin_parser.parser_admin_cmds(lists, thread, input);
