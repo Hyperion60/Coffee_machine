@@ -69,6 +69,30 @@ public class MainFrame extends JFrame{
     }
 
 
+    // Login-Signup
+    public JButton getLogin() {
+        return this.login;
+    }
+
+    public JButton getSignup() {
+        return this.signup;
+    }
+
+    public JTextField getUsernamefield() {
+        return this.usernamefield;
+    }
+
+    public JPasswordField getPasswordfield() {
+        return this.passwordfield;
+    }
+
+    // Erreurs
+    public JTextPane getErreurCmd() {
+        return this.erreurCmd;
+    }
+
+
+
     public static void main(String[] args){
         MainFrame myFrame = new MainFrame();
         Progress progress = new Progress(myFrame);
