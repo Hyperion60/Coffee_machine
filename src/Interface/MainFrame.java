@@ -17,17 +17,28 @@ public class MainFrame extends JFrame{
     private JPanel mainPanel;
     private JLabel progressionCommande;
     private JTabbedPane tabbedPane1;
-    private JPanel Commandes;
-    private JPanel Produits;
-    private JPanel Taille;
+    private JPanel Commande;
+    private JPanel Produit;
     private JPanel Machine;
     private JPanel Logs;
+    private JTextField usernamefield;
+    private JPasswordField passwordfield;
+    private JButton login;
+    private JButton signup;
+    private JTextArea listProduit;
+    private JButton recharge;
+    private JFormattedTextField value_recharge;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
+    private JButton commanderButton;
+    private JProgressBar progressCmd;
+    private JList listCmd;
+    private JTextPane erreurCmd;
+    private JTextPane textPane1;
     private JPanel Apercu;
-    private JButton log_in;
-    private JTextField login;
-    private JPasswordField password;
-    private JButton sign_up;
-    private JLabel bank;
+    private JPanel Taille;
+    private JLabel labelRecharge;
+    private JLabel ValueCmd;
 
 
     public MainFrame(){
