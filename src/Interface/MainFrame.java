@@ -95,11 +95,9 @@ public class MainFrame extends JFrame{
 
     public static void main(String[] args){
         MainFrame myFrame = new MainFrame();
-        Progress progress = new Progress(myFrame);
-        Thread cafeThread = new Thread(progress);
-
-
-        cafeThread.start();
+        if (args.length != 3) {
+            System.out.println("Usage:");
+        }
 
     }
 }
