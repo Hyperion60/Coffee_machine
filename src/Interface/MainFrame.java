@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +98,16 @@ public class MainFrame extends JFrame{
     public static void main(String[] args){
         MainFrame myFrame = new MainFrame();
         if (args.length != 3) {
-            System.out.println("Usage:");
+            System.out.println("Usage:\n" + args[0] + " <ip serveur> <port serveur>");
+            return;
         }
-
+        Socket server = null;
+        try {
+            server = new Socket(args[1], Integer.parseInt(args[2]));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        ServerCmd serverCmd = new ServerCmd(server);
     }
 }
