@@ -15,40 +15,28 @@ public class MainFrame extends JFrame{
     private JProgressBar statutPreparation;
     private JList<String> listeProduits;
     private JPanel mainPanel;
-    private JPanel prepaPanel;
     private JLabel progressionCommande;
-
+    private JTabbedPane tabbedPane1;
+    private JPanel Commandes;
+    private JPanel Produits;
+    private JPanel Taille;
+    private JPanel Machine;
+    private JPanel Logs;
+    private JPanel Apercu;
+    private JButton log_in;
+    private JTextField login;
+    private JPasswordField password;
+    private JButton sign_up;
+    private JLabel bank;
 
 
     public MainFrame(){
         setContentPane(mainPanel);
         setTitle("Machine à café");
-        setSize(500,500);
+        setSize(800,500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-
-        restantCafe.setValue(100);
-        restantCafe.setStringPainted(true);
-        restantLait.setValue(100);
-        restantLait.setStringPainted(true);
-        restantThe.setValue(100);
-        restantThe.setStringPainted(true);
-        statutPreparation.setValue(0);
-        statutPreparation.setStringPainted(true);
-
-
-        //Remplissage de produits
-        DefaultListModel produits = new DefaultListModel();
-        produits.addElement("café long");
-        produits.addElement("thé vert");
-        produits.addElement("thé rouge");
-
-        listeProduits.setModel(produits);
-
-        ImageIcon gif = new ImageIcon("U:/Interface graphique/src/Interface/cafe.gif");
-
-        progressionCommande.setIcon(gif);
 
 
     }
