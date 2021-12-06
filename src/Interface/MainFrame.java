@@ -1,19 +1,16 @@
 package Interface;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFrame extends JFrame{
-    private JProgressBar restantCafe;
-    private JProgressBar restantLait;
-    private JProgressBar restantThe;
+public class MainFrame extends JFrame implements ActionListener {
     private JProgressBar statutPreparation;
     private JList<String> listeProduits;
     private JPanel mainPanel;
@@ -34,13 +31,17 @@ public class MainFrame extends JFrame{
     private JComboBox comboBox2;
     private JButton commanderButton;
     private JProgressBar progressCmd;
-    private JList listCmd;
     private JTextPane erreurCmd;
     private JTextPane textPane1;
     private JPanel Apercu;
     private JPanel Taille;
     private JLabel labelRecharge;
     private JLabel ValueCmd;
+    private JLabel Bank;
+    private JLabel ListCmd;
+
+    public List<String> Errors;
+    private ServerCmd serverCmd;
 
 
     public MainFrame(){
@@ -49,22 +50,17 @@ public class MainFrame extends JFrame{
         setSize(800,500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-
-
-
-    }
-    //Progressbar
-    public JProgressBar getRestantCafe(){
-        return restantCafe;
+        this.add(login);
+        this.Errors = new ArrayList<>();
     }
 
-    public JProgressBar getRestantLait() {
-        return restantLait;
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.login) {
+            this.serverCmd.Login_client();
+        }
     }
 
-    public JProgressBar getRestantThe() {
-        return restantThe;
-    }
 
     public JProgressBar getStatutPreparation() {
         return statutPreparation;
@@ -93,9 +89,58 @@ public class MainFrame extends JFrame{
         return this.erreurCmd;
     }
 
+    public void refreshErreur() {
+        while (this.Errors.size() > 3) {
+            this.Errors.remove(this.Errors.size() - 1);
+        }
+        StringBuilder ErreurRendu = new StringBuilder("Erreurs:");
+        for (String err:this.Errors) {
+            ErreurRendu.append("\n").append(err);
+        }
+        this.erreurCmd.setText(ErreurRendu.toString());
+    }
 
+    // Bank
+    public JLabel getBank() {
+        return this.Bank;
+    }
 
-    public static void main(String[] args){
+    // Commandes
+    public void refreshListCmd(@NotNull String line) {
+        try {
+            // Format : name,type,taille,etat
+            // Debut de l'html
+            StringBuilder list_cmd = new StringBuilder("<html>");
+
+            // Ajout du titre
+            list_cmd.append("<b>Liste des commandes</b><br>");
+
+            // Ajout des commandes
+            for (String cmd : line.split(";")) {
+                if (cmd.length() != 0) {
+                    list_cmd.append(cmd.split(",")[0]).append(", ").append(cmd.split(",")[1]);
+                    list_cmd.append(" - ").append(cmd.split(",")[2]).append(" : ");
+                    if (cmd.split(",")[3].equals("Waiting")) {
+                        list_cmd.append("<font color='orange'>En attente</font>");
+                    } else if (cmd.split(",")[3].equals("Finish")) {
+                        list_cmd.append("<font color='green'>Finie</font>");
+                    } else if (cmd.split(",")[3].equals("Cancelled")) {
+                        list_cmd.append("<font color='red'>Annulée</font>");
+                    } else {
+                        list_cmd.append("<font color='grey'>Inconnue</font>");
+                    }
+                }
+            }
+
+            // Fin de l'html
+            list_cmd.append("</html>");
+            this.ListCmd.setText(list_cmd.toString());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            this.ListCmd.setText("<html><font color='red'><b>Echec de la lecture !</b></font></html>");
+        }
+    }
+
+    public void main(String[] args){
         MainFrame myFrame = new MainFrame();
         if (args.length != 3) {
             System.out.println("Usage:\n" + args[0] + " <ip serveur> <port serveur>");
@@ -108,6 +153,6 @@ public class MainFrame extends JFrame{
             e.printStackTrace();
             return;
         }
-        ServerCmd serverCmd = new ServerCmd(server);
+        this.serverCmd = new ServerCmd(server, this);
     }
 }
