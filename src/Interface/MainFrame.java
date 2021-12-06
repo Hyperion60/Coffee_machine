@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +40,28 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel ValueCmd;
     private JLabel Bank;
     private JLabel ListCmd;
+    private JButton connexion;
 
     public List<String> Errors;
     private ServerCmd serverCmd;
 
 
-    public MainFrame(){
+    public MainFrame(String ip, int port) {
         setContentPane(mainPanel);
         setTitle("Machine à café");
         setSize(800,500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-        this.add(login);
+        this.login = this.connexion;
+        // this.add(login);
+        // this.add(signup);
+        // this.add(login);
         this.Errors = new ArrayList<>();
+        try {
+            this.serverCmd = new ServerCmd(new Socket(ip, port), this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -69,7 +79,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     // Login-Signup
     public JButton getLogin() {
-        return this.login;
+        return this.connexion;
     }
 
     public JButton getSignup() {
@@ -140,19 +150,12 @@ public class MainFrame extends JFrame implements ActionListener {
         }
     }
 
-    public void main(String[] args){
-        MainFrame myFrame = new MainFrame();
-        if (args.length != 3) {
-            System.out.println("Usage:\n" + args[0] + " <ip serveur> <port serveur>");
+    public static void main(String[] args){
+        if (args.length != 2) {
+            System.out.println("Usage:\n UI_client.exe <ip serveur> <port serveur>");
             return;
         }
-        Socket server = null;
-        try {
-            server = new Socket(args[1], Integer.parseInt(args[2]));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        this.serverCmd = new ServerCmd(server, this);
+        MainFrame myFrame = new MainFrame(args[0], Integer.parseInt(args[1]));
     }
+
 }
