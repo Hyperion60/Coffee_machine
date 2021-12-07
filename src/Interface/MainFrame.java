@@ -10,6 +10,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import Interface.ServerCmd;
 
 public class MainFrame extends JFrame implements ActionListener {
     private JProgressBar statutPreparation;
@@ -41,6 +42,12 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel Bank;
     private JLabel ListCmd;
     private JButton connexion;
+    private JPanel Connect;
+    private JButton connect_server;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JLabel ip_addr;
+    private JLabel port;
 
     public List<String> Errors;
     private ServerCmd serverCmd;
@@ -57,11 +64,12 @@ public class MainFrame extends JFrame implements ActionListener {
         // this.add(signup);
         // this.add(login);
         this.Errors = new ArrayList<>();
-        try {
-            this.serverCmd = new ServerCmd(new Socket(ip, port), this);
-        } catch (IOException e) {
+        /*try {
+            Socket server = new Socket(ip, port);
+            this.serverCmd = new ServerCmd(server, this);
+        } catch (Throwable e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
