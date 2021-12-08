@@ -30,8 +30,6 @@ public class MainFrame extends JFrame implements ActionListener {
     private JButton commanderButton;
     private JProgressBar progressCmd;
     private JTextPane erreurCmd;
-    private JTextPane textPane1;
-    private JPanel Apercu;
     private JPanel Taille;
     private JLabel labelRecharge;
     private JLabel ValueCmd;
@@ -49,6 +47,17 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel ProductName;
     private JPanel panel_com;
     private JPanel cmd_panel;
+    private JLabel info_label;
+    private JLabel info;
+    private JLabel location_label;
+    private JLabel location;
+    private JLabel capacity_label;
+    private JLabel state_label;
+    private JLabel state;
+    private JLabel client_nb_label;
+    private JLabel client_nb;
+    private JLabel cafe_nb_label;
+    private JLabel nb_cafe;
     private JLabel ProductPrice;
 
     public List<String> Errors;
