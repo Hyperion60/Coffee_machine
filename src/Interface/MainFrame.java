@@ -10,11 +10,8 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import Interface.ServerCmd;
 
 public class MainFrame extends JFrame implements ActionListener {
-    private JProgressBar statutPreparation;
-    private JList<String> listeProduits;
     private JPanel mainPanel;
     private JLabel progressionCommande;
     private JTabbedPane tabbedPane1;
@@ -24,13 +21,12 @@ public class MainFrame extends JFrame implements ActionListener {
     private JPanel Logs;
     private JTextField usernamefield;
     private JPasswordField passwordfield;
-    private JButton login;
     private JButton signup;
     private JTextArea listProduit;
     private JButton recharge;
     private JFormattedTextField value_recharge;
-    private JComboBox comboBox1;
-    private JComboBox comboBox2;
+    private JComboBox ProductList;
+    private JComboBox SizeList;
     private JButton commanderButton;
     private JProgressBar progressCmd;
     private JTextPane erreurCmd;
@@ -44,10 +40,11 @@ public class MainFrame extends JFrame implements ActionListener {
     private JButton connexion;
     private JPanel Connect;
     private JButton connect_server;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTextField ip_addr_field;
+    private JTextField port_field;
     private JLabel ip_addr;
     private JLabel port;
+    private JLabel server_err;
 
     public List<String> Errors;
     private ServerCmd serverCmd;
@@ -59,41 +56,43 @@ public class MainFrame extends JFrame implements ActionListener {
         setSize(800,500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-        this.login = this.connexion;
-        // this.add(login);
-        // this.add(signup);
-        // this.add(login);
         this.Errors = new ArrayList<>();
-        /*try {
-            Socket server = new Socket(ip, port);
-            this.serverCmd = new ServerCmd(server, this);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }*/
+        this.connect_server.addActionListener(this);
+        this.connexion.addActionListener(this);
+        this.signup.addActionListener(this);
+        this.recharge.addActionListener(this);
+        this.commanderButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.login) {
+        if (e.getSource() == this.connexion) {
             this.serverCmd.Login_client();
+        } else if (e.getSource() == this.connect_server) {
+            try {
+                String ip = this.ip_addr_field.getText();
+                int port = Integer.parseInt(this.port_field.getText());
+                Socket server = new Socket(ip, port);
+                this.serverCmd = new ServerCmd(server, this);
+                this.server_err.setText("<html><font color='green'>Connexion réussie</font></html>");
+            } catch (ConnectException err) {
+                try {
+                    throw err;
+                } catch (ConnectException ex) {
+                    System.out.println(ex);
+                    this.server_err.setText("<html><ul><li><font color='red'>Echec de la connexion !</font></li></ul></html>");
+                }
+            } catch (IOException err) {
+                err.printStackTrace();
+            } catch (NumberFormatException err) {
+                this.server_err.setText("<html><ul><li><font color='red'>Port invalide !</font></li></ul></html>");
+            }
+        } else if (e.getSource() == this.recharge) {
+            this.serverCmd.Recharge_client();
         }
     }
 
-
-    public JProgressBar getStatutPreparation() {
-        return statutPreparation;
-    }
-
-
     // Login-Signup
-    public JButton getLogin() {
-        return this.connexion;
-    }
-
-    public JButton getSignup() {
-        return this.signup;
-    }
-
     public JTextField getUsernamefield() {
         return this.usernamefield;
     }
@@ -121,6 +120,10 @@ public class MainFrame extends JFrame implements ActionListener {
     // Bank
     public JLabel getBank() {
         return this.Bank;
+    }
+
+    public JFormattedTextField getValue_recharge() {
+        return this.value_recharge;
     }
 
     // Commandes
@@ -156,6 +159,20 @@ public class MainFrame extends JFrame implements ActionListener {
         } catch (ArrayIndexOutOfBoundsException e) {
             this.ListCmd.setText("<html><font color='red'><b>Echec de la lecture !</b></font></html>");
         }
+    }
+
+    public JLabel getListCmd() {
+        return this.ListCmd;
+    }
+
+    // Produits
+    public javax.swing.JComboBox getProductList() {
+        return ProductList;
+    }
+
+    // Tailles
+    public javax.swing.JComboBox getSizeList() {
+        return this.SizeList;
     }
 
     public static void main(String[] args){
