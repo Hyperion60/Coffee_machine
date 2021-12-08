@@ -102,6 +102,7 @@ public class main_parser {
                         Command command;
                         if ((command = thread.user.newCommand(lists, thread, product_name, product_type, cmd_taille)) != null) {
                             lists.coffee.AddCommand(command);
+                            lists.nb_cafe += 1;
                         }
                     }
                 }
