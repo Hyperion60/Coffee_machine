@@ -108,7 +108,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     public void refreshErreur() {
         while (this.Errors.size() > 3) {
-            this.Errors.remove(this.Errors.size() - 1);
+            this.Errors.remove(0);
         }
         StringBuilder ErreurRendu = new StringBuilder("Erreurs:");
         for (String err:this.Errors) {
