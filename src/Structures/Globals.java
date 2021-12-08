@@ -23,6 +23,7 @@ public class Globals {
     public int server_port;
     public AJAXServer ajaxServer;
     public Thread ajaxThread;
+    public int nb_cafe;
 
     public Globals() {
         this.list_user = new ArrayList<>();
@@ -31,6 +32,7 @@ public class Globals {
         this.signup = new Signup();
         this.login = new Login();
         this.server_port = 867;
+        this.nb_cafe = 0;
 
         this.ajaxServer = new AJAXServer(this);
         this.ajaxThread = new Thread(this.ajaxServer);
