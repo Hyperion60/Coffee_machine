@@ -26,7 +26,7 @@ public class AJAXServer implements Runnable {
             // System.out.println("[LOG] End AJAX sleep !");
             // Refresh machine variables each second
             lists.coffee.RefreshCommand();
-            System.out.println("[LOG] Server Refresh !");
+            // System.out.println("[LOG] Server Refresh !");
         }
     }
 }
