@@ -69,6 +69,8 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.connexion) {
             this.serverCmd.Login_client();
+        } else if (e.getSource() == this.signup) {
+            this.serverCmd.Signup_client();
         } else if (e.getSource() == this.connect_server) {
             try {
                 String ip = this.ip_addr_field.getText();

@@ -109,7 +109,7 @@ public class ServerCmd {
                 // Solde
                 this.refreshBank(false);
                 // Liste des commandes
-                status = this.ioCommand.ecrireReseau("ListCmd");
+                this.ioCommand.ecrireReseau("ListCmd");
                 response = this.ioCommand.lireReseau();
                 if (response.split(":")[0].equals("Liste")) {
                     for (String cmd: response.split(":")[1].split(";")) {
@@ -130,6 +130,26 @@ public class ServerCmd {
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void Signup_client() {
+        String login = mainFrame.getUsernamefield().getText();
+        String pass = mainFrame.getPasswordfield().getText();
+        if (login.length() == 0 || pass.length() == 0) {
+            mainFrame.Errors.add("Login ou mot de passe vide !");
+            mainFrame.refreshErreur();
+            return;
+        }
+        this.ioCommand.ecrireReseau("Signup:" + login + "," + pass);
+        String response = this.ioCommand.lireReseau();
+        if (response.split(" : ")[0].equals("Erreur")) {
+            this.mainFrame.Errors.add(response);
+            this.mainFrame.refreshErreur();
+            return;
+        }
+        if (response.equals("Compte crée avec succès !")) {
+            this.Login_client();
         }
     }
 
