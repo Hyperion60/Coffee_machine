@@ -156,6 +156,9 @@ public class main_parser {
             case "ClientStat":
                 thread.stream.ecrireReseau("Nombre de client:" + lists.list_client.size());
                 break;
+            case "CafeNb":
+                thread.stream.ecrireReseau("Nombre de café:" + lists.nb_cafe);
+                break;
             default:
                 if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {
                     admin_parser.parser_admin_cmds(lists, thread, input);
