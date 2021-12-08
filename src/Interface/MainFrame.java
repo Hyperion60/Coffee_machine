@@ -3,6 +3,7 @@ package Interface;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -22,7 +23,6 @@ public class MainFrame extends JFrame implements ActionListener {
     private JTextField usernamefield;
     private JPasswordField passwordfield;
     private JButton signup;
-    private JTextArea listProduit;
     private JButton recharge;
     private JFormattedTextField value_recharge;
     private JComboBox ProductList;
@@ -46,6 +46,10 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel port;
     private JLabel server_err;
     private JLabel Etat;
+    private JLabel ProductName;
+    private JPanel panel_com;
+    private JPanel cmd_panel;
+    private JLabel ProductPrice;
 
     public List<String> Errors;
     public ServerCmd serverCmd;
@@ -63,6 +67,9 @@ public class MainFrame extends JFrame implements ActionListener {
         this.signup.addActionListener(this);
         this.recharge.addActionListener(this);
         this.commanderButton.addActionListener(this);
+
+        this.erreurCmd.setBackground(new Color(255, 206, 206));
+        this.panel_com.setBackground(new Color(196,240, 255));
     }
 
     @Override
@@ -185,6 +192,14 @@ public class MainFrame extends JFrame implements ActionListener {
     // Produits
     public javax.swing.JComboBox getProductList() {
         return ProductList;
+    }
+
+    public JLabel getProductName() {
+        return ProductName;
+    }
+
+    public JLabel getProductPrice() {
+        return this.ProductPrice;
     }
 
     // Tailles

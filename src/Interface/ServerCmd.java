@@ -47,12 +47,17 @@ public class ServerCmd {
             this.mainFrame.refreshErreur();
             return;
         }
+        StringBuilder infoproducts = new StringBuilder("<html><b>Liste des produits :</b>\n<ul>");
         List<String> products = new ArrayList<>();
         for (String product: response.split(":")[1].split(";")) {
             if (product.length() != 0) {
                 products.add(product.split(",")[0] + " - " + product.split(",")[1]);
+                infoproducts.append("<li>").append(product.split(",")[0]).append(" - ");
+                infoproducts.append(product.split(",")[1]).append(" => ").append(product.split(",")[2]);
+                infoproducts.append("</li>");
             }
         }
+        infoproducts.append("</ul></html>");
         if (products.size() == 0) {
             products.add("Aucun produit !");
         }
@@ -61,6 +66,7 @@ public class ServerCmd {
             list_product[i] = products.get(i);
         }
         this.mainFrame.getProductList().setModel(new DefaultComboBoxModel<>(list_product));
+        this.mainFrame.getProductName().setText(infoproducts.toString());
     }
 
     private void refreshListSize() {
