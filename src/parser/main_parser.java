@@ -59,10 +59,15 @@ public class main_parser {
                     thread.stream.ecrireReseau("Connexion réussie " + thread.user.getName());
                 break;
             case "Signup":
-                if (lists.signup.user_exists(lists, input)) {
-                    thread.stream.ecrireReseau("Erreur : L'utilisateur existe déjà !");
-                } else {
-                    thread.user = lists.signup.Parser_signup(lists, input);
+                try {
+                    if (lists.signup.user_exists(lists, input)) {
+                        thread.stream.ecrireReseau("Erreur : L'utilisateur existe déjà !");
+                    } else {
+                        thread.user = lists.signup.Parser_signup(lists, input);
+                        thread.stream.ecrireReseau("Compte crée avec succès !");
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    thread.stream.ecrireReseau("Erreur : Format invalide !");
                 }
                 break;
             case "Logout":
