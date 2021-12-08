@@ -89,6 +89,8 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         } else if (e.getSource() == this.recharge) {
             this.serverCmd.Recharge_client();
+        } else if (e.getSource() == this.commanderButton) {
+            this.serverCmd.NewCommande();
         }
     }
 

@@ -136,4 +136,17 @@ public class ServerCmd {
             this.refreshBank();
         }
     }
+
+    public void NewCommande() {
+        String produit = this.mainFrame.getProductList().getItemAt(this.mainFrame.getProductList().getSelectedIndex()).toString();
+        String taille = this.mainFrame.getSizeList().getItemAt(this.mainFrame.getSizeList().getSelectedIndex()).toString();
+        this.ioCommand.ecrireReseau("Cmd:" + produit.split(" - ")[0] + "," + produit.split(" - ")[1] + "," + taille);
+        String response = this.ioCommand.lireReseau();
+        if (response.split(":")[0].equals("Erreur")) {
+            this.mainFrame.Errors.add(response);
+            this.mainFrame.refreshErreur();
+            return;
+        }
+        // Lancer le thread
+    }
 }
