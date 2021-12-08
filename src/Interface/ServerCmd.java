@@ -26,10 +26,13 @@ public class ServerCmd {
         this.ioCommand.ecrireReseau("Bank");
         String response = this.ioCommand.lireReseau();
         if (response.split(" : ")[0].equals("Solde actuel")) {
+            float account = Float.parseFloat(response.split(" : ")[1].split("€")[0]);
+            int round = (int)(account * 100);
+            account = ((float)round) / 100;
             if (!err)
-                this.mainFrame.getBank().setText("Compte bancaire : " + response.split(" : ")[1] + " €");
+                this.mainFrame.getBank().setText("Compte bancaire : " + account + " €");
             else
-                this.mainFrame.getBank().setText("<html><font color='red'><b>Compte bancaire : " + response.split(" : ")[1] + " €</b></font></html>");
+                this.mainFrame.getBank().setText("<html><font color='red'><b>Compte bancaire : " + account + " €</b></font></html>");
         } else {
             this.mainFrame.Errors.add("Echec de la récupération du compte bancaire");
             this.mainFrame.refreshErreur();
