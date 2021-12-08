@@ -6,16 +6,20 @@ public class Progress implements Runnable {
         this.mainFrame = mainFrame;
 
     }
+
+
     @Override
     public void run()
-    {
+    {   int stockCafe = mainFrame.getStockCafe();
+        int stockThea = mainFrame.getStockThea();
+        int stockLait = mainFrame.getStockLait();
         int i = 100;
         try {
             while (i >= 0) {
                 // fill the menu bar
-                mainFrame.getRestantCafe().setValue(i - 1);
-                mainFrame.getRestantLait().setValue(i - 1);
-                mainFrame.getRestantThe().setValue(i - 1);
+                mainFrame.getRestantCafe().setValue(i-stockCafe);
+                mainFrame.getRestantLait().setValue(i - stockThea);
+                mainFrame.getRestantThe().setValue(i - stockLait);
                 mainFrame.getStatutPreparation().setValue(100 - i);
                 // delay the thread
                 Thread.sleep(500);
