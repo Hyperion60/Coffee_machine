@@ -115,6 +115,7 @@ public class ServerCmd {
                 // Solde
                 this.refreshBank(false);
                 // Liste des commandes
+                /*
                 this.ioCommand.ecrireReseau("ListCmd");
                 response = this.ioCommand.lireReseau();
                 if (response.split(":")[0].equals("Liste")) {
@@ -126,7 +127,7 @@ public class ServerCmd {
                     }
                 } else {
                     this.mainFrame.getListCmd().setText("<html><b>Aucune commande !</b></html>");
-                }
+                }*/
                 // Liste des produits
                 this.refreshListProduct();
                 this.refreshListSize();

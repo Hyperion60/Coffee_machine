@@ -34,7 +34,6 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel labelRecharge;
     private JLabel ValueCmd;
     private JLabel Bank;
-    private JLabel ListCmd;
     private JButton connexion;
     private JPanel Connect;
     private JButton connect_server;
@@ -58,6 +57,8 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel client_nb;
     private JLabel cafe_nb_label;
     private JLabel nb_cafe;
+    private JButton rafraichirButton;
+    private JLabel capacity;
     private JLabel ProductPrice;
 
     public List<String> Errors;
@@ -106,6 +107,7 @@ public class MainFrame extends JFrame implements ActionListener {
             } catch (NumberFormatException err) {
                 this.server_err.setText("<html><ul><li><font color='red'>Port invalide !</font></li></ul></html>");
             }
+            this.init_machine();
         } else if (e.getSource() == this.recharge) {
             this.serverCmd.Recharge_client();
         } else if (e.getSource() == this.commanderButton) {
@@ -148,6 +150,7 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     // Commandes
+    /*
     public void refreshListCmd(@NotNull String line) {
         try {
             // Format : name,type,taille,etat
@@ -180,11 +183,11 @@ public class MainFrame extends JFrame implements ActionListener {
         } catch (ArrayIndexOutOfBoundsException e) {
             this.ListCmd.setText("<html><font color='red'><b>Echec de la lecture !</b></font></html>");
         }
-    }
+    }*/
 
-    public JLabel getListCmd() {
+    /*public JLabel getListCmd() {
         return this.ListCmd;
-    }
+    }*/
 
     public JLabel getEtat() {
         return this.Etat;
@@ -214,6 +217,31 @@ public class MainFrame extends JFrame implements ActionListener {
     // Tailles
     public javax.swing.JComboBox getSizeList() {
         return this.SizeList;
+    }
+
+
+    // Machine
+    protected void init_machine() {
+        this.info_label.setText("<html><b>Informations :</b></html>");
+        this.location_label.setText("<html><b>Localisation :</b></html>");
+        this.capacity_label.setText("<html><b>Capacité de la machine :</b></html>");
+        this.state_label.setText("<html><b>Etat de la machine :</b></html>");
+        this.client_nb_label.setText("<html><b>Nombre de clients servis :</b></html>");
+        this.cafe_nb_label.setText("<html><b>Nombre de cafés servis :</b></html>");
+
+        this.serverCmd.ioCommand.ecrireReseau("Machine_infos");
+        this.info.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau() + "</b></html>");
+        this.serverCmd.ioCommand.ecrireReseau("Location");
+        this.location.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau() + "</b></html>");
+        this.serverCmd.ioCommand.ecrireReseau("Capacity");
+        this.capacity.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau() + " kg</b></html>");
+        this.serverCmd.ioCommand.ecrireReseau("MachineState");
+        this.state.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau() + "</b></html>");
+        this.serverCmd.ioCommand.ecrireReseau("ClientStat");
+        String nb_client = this.serverCmd.ioCommand.lireReseau().split(":")[1];
+        this.client_nb.setText("<html><b>" + nb_client + "</b></html>");
+        this.serverCmd.ioCommand.ecrireReseau("CafeNb");
+        this.nb_cafe.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau().split(":")[1] + "</b></html>");
     }
 
     public static void main(String[] args){
