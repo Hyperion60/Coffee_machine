@@ -9,18 +9,27 @@ public class ServerCmd {
     Socket server;
     MainFrame mainFrame;
     IOCommand ioCommand;
+    List<ProgressCmd> progressCmdList;
+    List<Thread> threadList;
+    ProgressCmd progressCmd;
+    Thread threadCmd;
 
     public ServerCmd(Socket server, MainFrame mainFrame) {
         this.server = server;
         this.mainFrame = mainFrame;
         this.ioCommand = new IOCommand(server);
+        this.progressCmdList = new ArrayList<>();
+        this.threadList = new ArrayList<>();
     }
 
-    private void refreshBank() {
+    private void refreshBank(boolean err) {
         this.ioCommand.ecrireReseau("Bank");
         String response = this.ioCommand.lireReseau();
         if (response.split(" : ")[0].equals("Solde actuel")) {
-            this.mainFrame.getBank().setText("Compte bancaire : " + response.split(" : ")[1]);
+            if (!err)
+                this.mainFrame.getBank().setText("Compte bancaire : " + response.split(" : ")[1] + " €");
+            else
+                this.mainFrame.getBank().setText("<html><font color='red'><b>Compte bancaire : " + response.split(" : ")[1] + " €</b></font></html>");
         } else {
             this.mainFrame.Errors.add("Echec de la récupération du compte bancaire");
             this.mainFrame.refreshErreur();
@@ -95,7 +104,7 @@ public class ServerCmd {
             if (response.split(":").length == 1) {
                 // Connexion réussie
                 // Solde
-                this.refreshBank();
+                this.refreshBank(false);
                 // Liste des commandes
                 status = this.ioCommand.ecrireReseau("ListCmd");
                 response = this.ioCommand.lireReseau();
@@ -133,7 +142,7 @@ public class ServerCmd {
                 mainFrame.Errors.add("Echec du rechargement !");
                 mainFrame.refreshErreur();
             }
-            this.refreshBank();
+            this.refreshBank(false);
         }
     }
 
@@ -142,11 +151,23 @@ public class ServerCmd {
         String taille = this.mainFrame.getSizeList().getItemAt(this.mainFrame.getSizeList().getSelectedIndex()).toString();
         this.ioCommand.ecrireReseau("Cmd:" + produit.split(" - ")[0] + "," + produit.split(" - ")[1] + "," + taille);
         String response = this.ioCommand.lireReseau();
-        if (response.split(":")[0].equals("Erreur")) {
+        if (response.split(" : ")[0].equals("Erreur")) {
             this.mainFrame.Errors.add(response);
             this.mainFrame.refreshErreur();
             return;
         }
+        if (response.equals("Erreur: Solde insuffisant")) {
+            this.mainFrame.Errors.add(response);
+            this.mainFrame.refreshErreur();
+            this.refreshBank(true);
+            return;
+        }
+        this.refreshBank(false);
         // Lancer le thread
+        this.progressCmd = new ProgressCmd(this.ioCommand, this.mainFrame);
+        this.progressCmdList.add(this.progressCmd);
+        this.threadCmd = new Thread(this.progressCmd);
+        this.threadList.add(this.threadCmd);
+        this.threadCmd.start();
     }
 }

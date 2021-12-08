@@ -45,9 +45,10 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel ip_addr;
     private JLabel port;
     private JLabel server_err;
+    private JLabel Etat;
 
     public List<String> Errors;
-    private ServerCmd serverCmd;
+    public ServerCmd serverCmd;
 
 
     public MainFrame(String ip, int port) {
@@ -165,6 +166,18 @@ public class MainFrame extends JFrame implements ActionListener {
 
     public JLabel getListCmd() {
         return this.ListCmd;
+    }
+
+    public JLabel getEtat() {
+        return this.Etat;
+    }
+
+    public JProgressBar getProgressCmd() {
+        return this.progressCmd;
+    }
+
+    public JLabel getValueCmd() {
+        return this.ValueCmd;
     }
 
     // Produits
