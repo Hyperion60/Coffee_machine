@@ -17,9 +17,9 @@ public class Progress implements Runnable {
         try {
             while (i >= 0) {
                 // fill the menu bar
-                mainFrame.getRestantCafe().setValue(i-stockCafe);
-                mainFrame.getRestantLait().setValue(i - stockThea);
-                mainFrame.getRestantThe().setValue(i - stockLait);
+                mainFrame.getRestantCafe().setValue(stockCafe);
+                mainFrame.getRestantLait().setValue(stockThea);
+                mainFrame.getRestantThe().setValue(stockLait);
                 mainFrame.getStatutPreparation().setValue(100 - i);
                 // delay the thread
                 Thread.sleep(500);
