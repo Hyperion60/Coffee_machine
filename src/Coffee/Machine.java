@@ -21,13 +21,13 @@ public class Machine {
     private List<String> Type;
     private String Location;
     private Monitor Monitor;
-    private List<Command> list_command;
+    public List<Command> list_command;
     public State state;
 
 
     //2.initialisation
     public Machine() {
-        this.Norme = "Vendor description";
+        this.Norme = "Machine à café GRIT";
         this.Capacity_Coffee = 15;
         this.Capacity_Thea = 15;
         this.Capacity_Milk = 15;
@@ -42,7 +42,7 @@ public class Machine {
         this.state = State.IDLE;
     }
 
-    protected int second_remain(Command command) {
+    public int second_remain(Command command) {
         int delta_time = Math.toIntExact(command.begin_date.atZone(ZoneId.systemDefault()).toEpochSecond());
         delta_time += command.product.getDuree();
         delta_time -= Math.toIntExact(LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond());

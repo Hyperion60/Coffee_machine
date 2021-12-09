@@ -147,6 +147,7 @@ public class main_parser {
                         "thea," + lists.coffee.Remain_Thea + "/" + lists.coffee.Capacity_Thea + ";" +
                         "milk," + lists.coffee.Remain_Milk + "/" + lists.coffee.Capacity_Milk + ";";
                 thread.stream.ecrireReseau(stocklist);
+                System.out.println(stocklist);
                 break;
             case "MachineState":
                 switch (lists.coffee.state) {
@@ -164,6 +165,37 @@ public class main_parser {
                 break;
             case "CafeNb":
                 thread.stream.ecrireReseau("Nombre de café:" + lists.nb_cafe);
+                break;
+            case "Machine_infos":
+                thread.stream.ecrireReseau(lists.coffee.get_string_norme());
+                break;
+            case "Location":
+                thread.stream.ecrireReseau(lists.coffee.get_string_location());
+                break;
+            case "Capacity":
+                thread.stream.ecrireReseau(String.valueOf(lists.coffee.get_string_Capacity()));
+                break;
+            case "Monitor_Status":
+                if (lists.coffee.state == State.IDLE)
+                    thread.stream.ecrireReseau("IDLE");
+                else if (lists.coffee.state == State.WORKING)
+                    thread.stream.ecrireReseau("En fonction");
+                else if (lists.coffee.state == State.OFFLINE)
+                    thread.stream.ecrireReseau("Hors ligne");
+                else
+                    thread.stream.ecrireReseau("Inconnue");
+                break;
+            case "CmdStatus":
+                for (Command cmd: lists.coffee.list_command) {
+                    if (cmd.state == CommandState.PROGRESS) {
+                        int percent = ((lists.coffee.second_remain(cmd) * 100) / cmd.product.getDuree());
+                        if (percent < 0)
+                            percent = 0;
+                        thread.stream.ecrireReseau((100 - percent) + ":" + cmd.product.getName() + " - " + cmd.product.getType());
+                        return;
+                    }
+                }
+                thread.stream.ecrireReseau("Aucune commande en cours");
                 break;
             default:
                 if (thread.user != null && thread.user.getPrivileges() == Privileges.MAINTAINER) {

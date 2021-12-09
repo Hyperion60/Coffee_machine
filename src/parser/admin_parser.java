@@ -263,6 +263,7 @@ public class admin_parser {
                     }
                 } catch (NumberFormatException e) {
                     thread.stream.ecrireReseau("Erreur: Format de quantité invalide.");
+                    quantity = null;
                 }
 
                 if (quantity != null && name != null) {
