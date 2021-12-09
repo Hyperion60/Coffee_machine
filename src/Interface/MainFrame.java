@@ -102,9 +102,9 @@ public class MainFrame extends JFrame{
             System.out.println("Str[" + i + "]:" + ipport[i]);
         }
 
-        stockCafe = (int)Float.parseFloat(strs[2]);
+        /*stockCafe = (int)Float.parseFloat(strs[2]);
         stockThea = (int)Float.parseFloat(strs[5]);
-        stockLait = (int)Float.parseFloat(strs[8]);
+        stockLait = (int)Float.parseFloat(strs[8]);*/
         restantCafe.setValue(100);
         restantCafe.setStringPainted(true);
         restantLait.setValue(100);
