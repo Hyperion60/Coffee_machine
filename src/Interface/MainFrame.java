@@ -59,9 +59,25 @@ public class MainFrame extends JFrame implements ActionListener {
     private JLabel nb_cafe;
     private JButton rafraichirButton;
     private JLabel capacity;
+    private JLabel server_title;
+    private JProgressBar milk_bar;
+    private JProgressBar thea_bar;
+    private JProgressBar coffee_bar;
+    private JLabel coffee_label;
+    private JLabel milk_label;
+    private JLabel thea_label;
+    private JTextField coffee_add;
+    private JButton recharge_coffee;
+    private JButton recharge_thea;
+    private JButton recharge_milk;
+    private JTextField thea_add;
+    private JTextField milk_add;
+    private JLabel recharge_coffee_label;
+    private JLabel machine_error;
     private JLabel ProductPrice;
 
     public List<String> Errors;
+    public List<String> MachineErrors;
     public ServerCmd serverCmd;
 
 
@@ -72,11 +88,16 @@ public class MainFrame extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         this.Errors = new ArrayList<>();
+        this.MachineErrors = new ArrayList<>();
         this.connect_server.addActionListener(this);
         this.connexion.addActionListener(this);
         this.signup.addActionListener(this);
         this.recharge.addActionListener(this);
         this.commanderButton.addActionListener(this);
+        this.rafraichirButton.addActionListener(this);
+        this.recharge_coffee.addActionListener(this);
+        this.recharge_thea.addActionListener(this);
+        this.recharge_milk.addActionListener(this);
 
         this.erreurCmd.setBackground(new Color(255, 206, 206));
         this.panel_com.setBackground(new Color(196,240, 255));
@@ -88,6 +109,8 @@ public class MainFrame extends JFrame implements ActionListener {
             this.serverCmd.Login_client();
         } else if (e.getSource() == this.signup) {
             this.serverCmd.Signup_client();
+        } else if (e.getSource() == this.rafraichirButton) {
+            this.init_machine(false);
         } else if (e.getSource() == this.connect_server) {
             try {
                 String ip = this.ip_addr_field.getText();
@@ -107,11 +130,36 @@ public class MainFrame extends JFrame implements ActionListener {
             } catch (NumberFormatException err) {
                 this.server_err.setText("<html><ul><li><font color='red'>Port invalide !</font></li></ul></html>");
             }
-            this.init_machine();
+            this.init_machine(true);
         } else if (e.getSource() == this.recharge) {
             this.serverCmd.Recharge_client();
         } else if (e.getSource() == this.commanderButton) {
             this.serverCmd.NewCommande();
+        } else if (e.getSource() == this.recharge_coffee) {
+            this.serverCmd.ioCommand.ecrireReseau("StockAdd:coffee," + this.coffee_add.getText());
+            String response = this.serverCmd.ioCommand.lireReseau();
+            System.out.println(response);
+            if (response.split(":")[0].equals("Erreur") || response.split(" : ")[0].equals("Erreur")) {
+                this.MachineErrors.add(response);
+                this.refreshMachineErreur();
+            }
+            this.init_machine(false);
+        } else if (e.getSource() == this.recharge_thea) {
+            this.serverCmd.ioCommand.ecrireReseau("StockAdd:thea," + this.thea_add.getText());
+            String response = this.serverCmd.ioCommand.lireReseau();
+            if (response.split(":")[0].equals("Erreur")) {
+                this.MachineErrors.add(response);
+                this.refreshMachineErreur();
+            }
+            this.init_machine(false);
+        } else if (e.getSource() == this.recharge_milk) {
+            this.serverCmd.ioCommand.ecrireReseau("StockAdd:milk," + this.milk_add.getText());
+            String response = this.serverCmd.ioCommand.lireReseau();
+            if (response.split(":")[0].equals("Erreur")) {
+                this.MachineErrors.add(response);
+                this.refreshMachineErreur();
+            }
+            this.init_machine(false);
         }
     }
 
@@ -125,10 +173,6 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     // Erreurs
-    public JTextPane getErreurCmd() {
-        return this.erreurCmd;
-    }
-
     public void refreshErreur() {
         while (this.Errors.size() > 3) {
             this.Errors.remove(0);
@@ -139,6 +183,19 @@ public class MainFrame extends JFrame implements ActionListener {
         }
         this.erreurCmd.setText(ErreurRendu.toString());
     }
+
+    public void refreshMachineErreur() {
+        while (this.MachineErrors.size() > 3) {
+            this.MachineErrors.remove(0);
+        }
+        StringBuilder ErreurRendu = new StringBuilder("<html><b>Erreurs:</b>");
+        for (String err:this.MachineErrors) {
+            ErreurRendu.append("<br>").append(err);
+        }
+        ErreurRendu.append("</html>");
+        this.machine_error.setText(ErreurRendu.toString());
+    }
+
 
     // Bank
     public JLabel getBank() {
@@ -185,10 +242,6 @@ public class MainFrame extends JFrame implements ActionListener {
         }
     }*/
 
-    /*public JLabel getListCmd() {
-        return this.ListCmd;
-    }*/
-
     public JLabel getEtat() {
         return this.Etat;
     }
@@ -221,13 +274,15 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
     // Machine
-    protected void init_machine() {
-        this.info_label.setText("<html><b>Informations :</b></html>");
-        this.location_label.setText("<html><b>Localisation :</b></html>");
-        this.capacity_label.setText("<html><b>Capacité de la machine :</b></html>");
-        this.state_label.setText("<html><b>Etat de la machine :</b></html>");
-        this.client_nb_label.setText("<html><b>Nombre de clients servis :</b></html>");
-        this.cafe_nb_label.setText("<html><b>Nombre de cafés servis :</b></html>");
+    protected void init_machine(boolean init) {
+        if (init) {
+            this.info_label.setText("<html><b>Informations :</b></html>");
+            this.location_label.setText("<html><b>Localisation :</b></html>");
+            this.capacity_label.setText("<html><b>Capacité de la machine :</b></html>");
+            this.state_label.setText("<html><b>Etat de la machine :</b></html>");
+            this.client_nb_label.setText("<html><b>Nombre de clients servis :</b></html>");
+            this.cafe_nb_label.setText("<html><b>Nombre de cafés servis :</b></html>");
+        }
 
         this.serverCmd.ioCommand.ecrireReseau("Machine_infos");
         this.info.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau() + "</b></html>");
@@ -242,6 +297,34 @@ public class MainFrame extends JFrame implements ActionListener {
         this.client_nb.setText("<html><b>" + nb_client + "</b></html>");
         this.serverCmd.ioCommand.ecrireReseau("CafeNb");
         this.nb_cafe.setText("<html><b>" + this.serverCmd.ioCommand.lireReseau().split(":")[1] + "</b></html>");
+
+        this.serverCmd.ioCommand.ecrireReseau("StockGet");
+        String response = this.serverCmd.ioCommand.lireReseau();
+        try {
+            String metric = response.split(":")[1];
+            int i = 0;
+            for (String bar: metric.split(";")) {
+                if (bar.length() != 0) {
+                    float remain = Float.parseFloat(bar.split(",")[1].split("/")[0]);
+                    float total = Float.parseFloat(bar.split(",")[1].split("/")[1]);
+                    if (i == 0) {
+                        this.coffee_bar.setValue((int)((remain * 100) / total));
+                        this.coffee_label.setText("<html><b>(" + (int)remain + "/" + (int)total + ") Réserve de café</b></html>");
+                        i++;
+                    } else if (i == 1) {
+                        this.thea_bar.setValue((int)((remain * 100) / total));
+                        this.thea_label.setText("<html><b>(" + (int)remain + "/" + (int)total + ") Réserve de thé</b></html>");
+                        i++;
+                    } else {
+                        this.milk_bar.setValue((int)((remain * 100) / total));
+                        this.milk_label.setText("<html><b>(" + (int)remain + "/" + (int)total + ") Réserve de lait</b></html>");
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            this.Errors.add("Erreur: Format invalide !");
+            this.refreshErreur();
+        }
     }
 
     public static void main(String[] args){
@@ -253,3 +336,4 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
 }
+

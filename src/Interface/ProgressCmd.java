@@ -15,7 +15,8 @@ public class ProgressCmd implements Runnable {
         while (true) {
             this.ioCommand.ecrireReseau("Progress");
             response = this.ioCommand.lireReseau();
-            if (response.equals("Commande terminée ou non traitée") || response.equals("Commande terminée") || response.equals("Erreur : Toutes vos commandes sont terminées")) {
+            if (response.equals("Commande terminée ou non traitée") || response.equals("Commande terminée") || response.equals("Erreur : Toutes vos commandes sont terminées")
+            || response.equals("Toutes vos commandes sont terminées")) {
                 this.mainFrame.getEtat().setText("<html><font color='green'>Terminée</font></html>");
                 this.mainFrame.getProgressCmd().setValue(100);
                 return;

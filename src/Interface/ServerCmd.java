@@ -194,6 +194,7 @@ public class ServerCmd {
         }
         this.refreshBank(false);
         // Lancer le thread
+        this.mainFrame.getProgressCmd().setValue(0);
         this.progressCmd = new ProgressCmd(this.ioCommand, this.mainFrame);
         this.progressCmdList.add(this.progressCmd);
         this.threadCmd = new Thread(this.progressCmd);
