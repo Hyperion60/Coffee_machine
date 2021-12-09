@@ -131,9 +131,11 @@ public class MainFrame extends JFrame{
 
 
         ImageIcon gif = new ImageIcon("U:/Interface graphique/src/Interface/cafe.gif");
-        if (etatMachine == "Au repos")
+        progressionCommande.setIcon(gif);
+
+        /*if (etatMachine == "Au repos")
             progressionCommande.setText("pas de commande en cours");
-        else progressionCommande.setIcon(gif);
+        else progressionCommande.setIcon(gif);*/
 
 
     }
