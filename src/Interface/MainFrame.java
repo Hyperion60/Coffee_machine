@@ -30,14 +30,13 @@ public class MainFrame extends JFrame{
     private JPanel dateCafe;
     private JLabel Etat;
     private JLabel ip_port;
-    private JLabel commande;
+    private JLabel commandeEnCours;
     private int stockCafe, stockThea,stockLait;
     private server.IOCommandes ioCommandes;
 
 
     public MainFrame(Socket socket){
         this.ioCommandes = new IOCommandes(socket);
-        Vector stock = new Vector();
 
         setContentPane(mainPanel);
         setTitle("Machine à café");
@@ -49,8 +48,12 @@ public class MainFrame extends JFrame{
         this.ioCommandes.ecrireReseau("MachineState");
         String etatMachine = this.ioCommandes.lireReseau();
         System.out.println("état de la machine => " + etatMachine);
-        //Parse
 
+        //Récupération état de la machine
+        this.ioCommandes.ecrireReseau("Statuscmd");
+        String commande = this.ioCommandes.lireReseau();
+        System.out.println("état de la machine => " + etatMachine);
+        String[] cmd = commande.split(":");
 
         // Récupération de la liste des produits
         this.ioCommandes.ecrireReseau("ProductList");
@@ -78,11 +81,13 @@ public class MainFrame extends JFrame{
         this.ioCommandes.ecrireReseau("ClientStat");
         String nbreClients = this.ioCommandes.lireReseau();
         System.out.println("ClientStat => " + nbreClients);
+        String[] nbrClients = nbreClients.split(":");
 
         // Récupération du nombre de café
         this.ioCommandes.ecrireReseau("CafeNb");
         String nbreCafe = this.ioCommandes.lireReseau();
         System.out.println("ClientStat => " + nbreCafe);
+        String[] nbrCafe = nbreCafe.split(":");
 
 
 
@@ -110,25 +115,25 @@ public class MainFrame extends JFrame{
         statutPreparation.setStringPainted(true);
         Etat.setText("La Machine est "+etatMachine);
         ip_port.setText("Adresse IP : " +ipport[1] +' '+ " , Port :" + ipport[3]  );
-        nbClients.setText(nbreClients);
-        nbCafe.setText(nbreCafe);
+        nbClients.setText(nbrClients[0]+" : "+nbrClients[1]);
+        nbCafe.setText(nbrCafe[0]+" servis : "+ nbrCafe[1]);
+        commandeEnCours.setText(cmd[0]+" : "+ cmd[1]);
+
 
 
 
         //Remplissage de produits
         DefaultListModel produits = new DefaultListModel();
-        produits.addElement(listeProd[1] + "  :  " + listeProd[3] + ' ' + '\u20AC' );
-        produits.addElement(listeProd[2] + "  :  " + listeProd[3]+ ' ' + '\u20AC');
-        produits.addElement(listeProd[4] + "  :  " + listeProd[6]+ ' ' + '\u20AC');
-        produits.addElement(listeProd[5] + "  :  " + listeProd[6]+ ' ' + '\u20AC');
-        produits.addElement(listeProd[7]+ ' ' +listeProd[8] + "  :  " + listeProd[9]+ ' ' + '\u20AC');
-
-
+        produits.addElement(listeProd[1] + " - " +listeProd[2] + "  :  " + listeProd[3]+ ' ' + '\u20AC' );
+        produits.addElement(listeProd[4] + " - " + listeProd[5] + "  :  " + listeProd[6]+ ' ' + '\u20AC');
+        produits.addElement(listeProd[7] + " - " + listeProd[8] + "  :  " + listeProd[9]+ ' ' + '\u20AC');
         listeProduits.setModel(produits);
 
-        ImageIcon gif = new ImageIcon("U:/Interface graphique/src/Interface/cafe.gif");
 
-        progressionCommande.setIcon(gif);
+        ImageIcon gif = new ImageIcon("U:/Interface graphique/src/Interface/cafe.gif");
+        if (etatMachine == "Au repos")
+            progressionCommande.setText("pas de commande en cours");
+        else progressionCommande.setIcon(gif);
 
 
     }
