@@ -13,19 +13,33 @@ public class Progress implements Runnable {
     {   int stockCafe = mainFrame.getStockCafe();
         int stockThea = mainFrame.getStockThea();
         int stockLait = mainFrame.getStockLait();
-        int i = 100;
         try {
-            while (i >= 0) {
+            while (true) {
+                mainFrame.ioCommandes.ecrireReseau("CmdStatus");
+                String status = mainFrame.ioCommandes.lireReseau();
+                System.out.println(status);
+                try {
+                    int percent = Integer.parseInt(status.split(":")[0]);
+                    String product = status.split(":")[1];
+                    mainFrame.getStatutPreparation().setValue(percent);
+                    mainFrame.getcommandeEnCours().setText(product);
+                } catch (NumberFormatException e) {
+                    System.out.println(status);
+                    mainFrame.getStatutPreparation().setValue(0);
+                    mainFrame.getcommandeEnCours().setText("Aucune commande en cours");
+                }
                 // fill the menu bar
-                mainFrame.getRestantCafe().setValue(stockCafe);
-                mainFrame.getRestantLait().setValue(stockThea);
-                mainFrame.getRestantThe().setValue(stockLait);
-                mainFrame.getStatutPreparation().setValue(100 - i);
+                mainFrame.refreshStock();
+                mainFrame.getRestantCafe().setValue(mainFrame.getStockCafe());
+                mainFrame.getRestantLait().setValue(mainFrame.getStockLait());
+                mainFrame.getRestantThe().setValue(mainFrame.getStockThea());
+                // mainFrame.getStatutPreparation().setValue(100 - i);
                 // delay the thread
                 Thread.sleep(500);
-                i -= 1;
             }
-        }catch (Exception e) {System.out.println("Interrupted exeption");
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Interrupted exeption");
         }
     }
 }

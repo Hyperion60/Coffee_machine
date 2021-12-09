@@ -32,7 +32,7 @@ public class MainFrame extends JFrame{
     private JLabel ip_port;
     private JLabel commandeEnCours;
     private int stockCafe, stockThea,stockLait;
-    private server.IOCommandes ioCommandes;
+    public server.IOCommandes ioCommandes;
 
 
     public MainFrame(Socket socket){
@@ -49,11 +49,11 @@ public class MainFrame extends JFrame{
         String etatMachine = this.ioCommandes.lireReseau();
         System.out.println("état de la machine => " + etatMachine);
 
-        //Récupération état de la machine
-        this.ioCommandes.ecrireReseau("Statuscmd");
+        /*//Récupération état de la machine
+        this.ioCommandes.ecrireReseau("CmdStatus");
         String commande = this.ioCommandes.lireReseau();
         System.out.println("état de la machine => " + etatMachine);
-        String[] cmd = commande.split(":");
+        String[] cmd = commande.split(":");*/
 
         // Récupération de la liste des produits
         this.ioCommandes.ecrireReseau("ProductList");
@@ -117,7 +117,7 @@ public class MainFrame extends JFrame{
         ip_port.setText("Adresse IP : " +ipport[1] +' '+ " , Port :" + ipport[3]  );
         nbClients.setText(nbrClients[0]+" : "+nbrClients[1]);
         nbCafe.setText(nbrCafe[0]+" servis : "+ nbrCafe[1]);
-        commandeEnCours.setText(cmd[0]+" : "+ cmd[1]);
+        //commandeEnCours.setText(cmd[0]+" : "+ cmd[1]);
 
 
 
@@ -139,6 +139,27 @@ public class MainFrame extends JFrame{
 
 
     }
+    public void refreshStock() {
+        this.ioCommandes.ecrireReseau("StockGet");
+        String stocks = this.ioCommandes.lireReseau();
+        System.out.println("StockGet => " + stocks);
+        //Parse
+        String[] strs = stocks.split("[:\\;\\,\\/]");
+        System.out.println("Substrings length:" + strs.length);
+        if (strs.length < 9)
+            return;
+        for (int i = 0; i < strs.length; i++) {
+            System.out.println("Str[" + i + "]:" + strs[i]);
+        }
+        stockCafe = (int)Float.parseFloat(strs[2]);
+        stockThea = (int)Float.parseFloat(strs[5]);
+        stockLait = (int)Float.parseFloat(strs[8]);
+    }
+
+    public JLabel getcommandeEnCours() {
+        return this.commandeEnCours;
+    }
+
     //Progressbar
     public JProgressBar getRestantCafe(){
         return restantCafe;
