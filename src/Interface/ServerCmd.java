@@ -23,8 +23,8 @@ public class ServerCmd {
     }
 
     private void refreshBank(boolean err) {
-        this.ioCommand.ecrireReseau("Bank");
-        String response = this.ioCommand.lireReseau();
+        this.ioCommand.writeNetwork("Bank");
+        String response = this.ioCommand.readNetwork();
         if (response.split(" : ")[0].equals("Solde actuel")) {
             float account = Float.parseFloat(response.split(" : ")[1].split("€")[0]);
             int round = (int)(account * 100);
@@ -40,8 +40,8 @@ public class ServerCmd {
     }
 
     private void refreshListProduct() {
-        this.ioCommand.ecrireReseau("ProductList");
-        String response = this.ioCommand.lireReseau();
+        this.ioCommand.writeNetwork("ProductList");
+        String response = this.ioCommand.readNetwork();
         if (response.split(":").length == 1) {
             this.mainFrame.Errors.add("Echec de la récupération de la liste des produits");
             this.mainFrame.refreshErreur();
@@ -70,8 +70,8 @@ public class ServerCmd {
     }
 
     private void refreshListSize() {
-        this.ioCommand.ecrireReseau("TailleList");
-        String response = this.ioCommand.lireReseau();
+        this.ioCommand.writeNetwork("TailleList");
+        String response = this.ioCommand.readNetwork();
         if (response.split(":").length == 1) {
             this.mainFrame.Errors.add("Echec de la récupération de la liste des produits");
             this.mainFrame.refreshErreur();
@@ -96,38 +96,24 @@ public class ServerCmd {
 
     public void Login_client() {
         String login = mainFrame.getUsernamefield().getText();
-        String pass = mainFrame.getPasswordfield().getText();
+        String pass = String.valueOf(mainFrame.getPasswordfield().getPassword());
         if (login.length() == 0 || pass.length() == 0) {
             mainFrame.Errors.add("Login ou mot de passe vide !");
             mainFrame.refreshErreur();
             return;
         }
-        int status = this.ioCommand.ecrireReseau("Login:" + login + "," + pass);
+        int status = this.ioCommand.writeNetwork("Login:" + login + "," + pass);
         if (status == 1) {
             this.mainFrame.Errors.add("Echec de la communication avec le serveur");
             this.mainFrame.refreshErreur();
             return;
         }
-        String response = this.ioCommand.lireReseau();
+        String response = this.ioCommand.readNetwork();
         try {
             if (response.split(":").length == 1) {
                 // Connexion réussie
                 // Solde
                 this.refreshBank(false);
-                // Liste des commandes
-                /*
-                this.ioCommand.ecrireReseau("ListCmd");
-                response = this.ioCommand.lireReseau();
-                if (response.split(":")[0].equals("Liste")) {
-                    for (String cmd: response.split(":")[1].split(";")) {
-                        if (cmd.length() != 0) {
-                            // Format : name,type,taille,etat
-                            this.mainFrame.refreshListCmd(response);
-                        }
-                    }
-                } else {
-                    this.mainFrame.getListCmd().setText("<html><b>Aucune commande !</b></html>");
-                }*/
                 // Liste des produits
                 this.refreshListProduct();
                 this.refreshListSize();
@@ -142,14 +128,14 @@ public class ServerCmd {
 
     public void Signup_client() {
         String login = mainFrame.getUsernamefield().getText();
-        String pass = mainFrame.getPasswordfield().getText();
+        String pass = String.valueOf(mainFrame.getPasswordfield().getPassword());
         if (login.length() == 0 || pass.length() == 0) {
             mainFrame.Errors.add("Login ou mot de passe vide !");
             mainFrame.refreshErreur();
             return;
         }
-        this.ioCommand.ecrireReseau("Signup:" + login + "," + pass);
-        String response = this.ioCommand.lireReseau();
+        this.ioCommand.writeNetwork("Signup:" + login + "," + pass);
+        String response = this.ioCommand.readNetwork();
         if (response.split(" : ")[0].equals("Erreur")) {
             this.mainFrame.Errors.add(response);
             this.mainFrame.refreshErreur();
@@ -166,8 +152,8 @@ public class ServerCmd {
             mainFrame.Errors.add("Champ de recharge vide !");
             mainFrame.refreshErreur();
         } else {
-            this.ioCommand.ecrireReseau("Bank:" + recharge);
-            String response = this.ioCommand.lireReseau();
+            this.ioCommand.writeNetwork("Bank:" + recharge);
+            String response = this.ioCommand.readNetwork();
             if (response.split(" : ").length == 1) {
                 mainFrame.Errors.add("Echec du rechargement !");
                 mainFrame.refreshErreur();
@@ -179,8 +165,8 @@ public class ServerCmd {
     public void NewCommande() {
         String produit = this.mainFrame.getProductList().getItemAt(this.mainFrame.getProductList().getSelectedIndex()).toString();
         String taille = this.mainFrame.getSizeList().getItemAt(this.mainFrame.getSizeList().getSelectedIndex()).toString();
-        this.ioCommand.ecrireReseau("Cmd:" + produit.split(" - ")[0] + "," + produit.split(" - ")[1] + "," + taille);
-        String response = this.ioCommand.lireReseau();
+        this.ioCommand.writeNetwork("Cmd:" + produit.split(" - ")[0] + "," + produit.split(" - ")[1] + "," + taille);
+        String response = this.ioCommand.readNetwork();
         if (response.split(" : ")[0].equals("Erreur")) {
             this.mainFrame.Errors.add(response);
             this.mainFrame.refreshErreur();
