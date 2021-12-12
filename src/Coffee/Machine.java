@@ -20,7 +20,6 @@ public class Machine {
     protected int Cafe_servis;
     private List<String> Type;
     private String Location;
-    private Monitor Monitor;
     public List<Command> list_command;
     public State state;
 
@@ -37,7 +36,6 @@ public class Machine {
         this.Cafe_servis = 0;
         this.Type = new ArrayList<>();
         this.Location = "Emplacement machine";
-        this.Monitor = new Monitor();
         this.list_command = new ArrayList<>();
         this.state = State.IDLE;
     }
